@@ -14,6 +14,7 @@ class HomePageState extends State<HomePage> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Logo(25.0, MainAxisAlignment.start),
+        backgroundColor: Colors.blueGrey,
       ),
       drawer: new Drawer(child: Material(color: Colors.blueGrey,),),
       body: new Material(
