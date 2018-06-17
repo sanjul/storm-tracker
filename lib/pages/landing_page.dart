@@ -12,10 +12,10 @@ class LandingPage extends StatefulWidget {
 
 class LandingPageState extends State<LandingPage>
     with SingleTickerProviderStateMixin {
-  Animation <double> _logoAnimation;
+  Animation<double> _logoAnimation;
   AnimationController _logoAnimationController;
 
-  final _opacityTween = new Tween <double>(begin:0.1, end:1.0);
+  final _opacityTween = new Tween<double>(begin: 0.1, end: 1.0);
 
   @override
   void initState() {
@@ -43,15 +43,18 @@ class LandingPageState extends State<LandingPage>
   @override
   Widget build(BuildContext context) {
     return new Material(
-      color: Colors.blueGrey,
+      color: Colors.black87,
       child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Transform.translate(
             offset: new Offset(0.0, _logoAnimation.value * -10),
-            child: new Opacity(opacity: _opacityTween.evaluate(_logoAnimation),child:new Logo(50.0, MainAxisAlignment.center),),
+            child: new Opacity(
+              opacity: _opacityTween.evaluate(_logoAnimation),
+              child: new Logo(50.0, MainAxisAlignment.center),
+            ),
           )
         ],
-        mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
   }

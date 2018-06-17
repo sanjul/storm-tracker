@@ -16,11 +16,11 @@ class Logo extends StatelessWidget {
               fontSize: this._size,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              letterSpacing: _size/6.25,
+              letterSpacing: _size/7,
           ),
         ),
         new Text(
-          "Tr",
+          "Tracker",
           style: new TextStyle(
               fontSize: this._size,
               fontWeight: FontWeight.bold,
