@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:stormtr/dependency_injection.dart';
 import 'pages/landing_page.dart';
 
 void main() {
   Injector.configure(
-    primaryDataSource: DataSource.MOCK,
+    primaryDataSource: DataSource.SQLLITE,
   );
 
   runApp(new MaterialApp(

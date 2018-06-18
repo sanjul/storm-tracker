@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
 
 abstract class StormsListViewContract {
   void onLoadStormsListComplete(List <Storm> stormsList);
-  void onLoadStormsListError();
+  void onLoadStormsListError(dynamic error);
 }
 
 class StormsListPresenter {
@@ -14,10 +16,11 @@ class StormsListPresenter {
     _stormsData = new Injector().stormsData;
   }
 
-  void loadStormsList() {
+  Future loadStormsList() async {
+    print("### Loading storms list####");
     _stormsData
         .fetchStormsList()
-        .then((c) => _view.onLoadStormsListComplete(c))
-        .catchError((error) => _view.onLoadStormsListError());
+        .then((list) => _view.onLoadStormsListComplete(list))
+        .catchError((error) => _view.onLoadStormsListError(error));
   }
 }

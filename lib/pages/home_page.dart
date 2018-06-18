@@ -1,11 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:side_header_list_view/side_header_list_view.dart';
+
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/modules/storms_presenter.dart';
+import 'package:stormtr/modules/storms_list_presenter.dart';
+import 'package:stormtr/pages/storm_record_page.dart';
+import 'package:stormtr/util/AppUtil.dart';
+
 import '../ui/logo.dart';
-import 'package:intl/intl.dart';
-import 'package:sticky_header_list/sticky_header_list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,49 +16,34 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> implements StormsListViewContract {
-  StormsListPresenter _stormsListPresenter;
+  StormsListPresenter _presenter;
   List<Storm> _stormsList;
-  List<dynamic> _stormsListGrouped;
   bool _loadFailed;
 
   //constructor
   HomePageState() {
-    _stormsListPresenter = new StormsListPresenter(this);
+    _presenter = new StormsListPresenter(this);
   }
 
   @override
   void initState() {
     super.initState();
-    _stormsListPresenter.loadStormsList();
+    _presenter.loadStormsList();
   }
 
   @override
   void onLoadStormsListComplete(List<Storm> stormsList) {
     setState(() {
-      _stormsListGrouped = new List<dynamic>();
-
       _stormsList = stormsList;
       _stormsList.sort((a, b) => b.startDatetime.compareTo(a.startDatetime));
-
-      int currentYear = new DateTime.now().year;
-      for (int i = 0; i < _stormsList.length; i++) {
-        Storm storm = _stormsList[i];
-        int year = storm.startDatetime.year;
-        if (currentYear != year) {
-          _stormsListGrouped.add(year);
-          currentYear = year;
-        }
-
-        _stormsListGrouped.add(storm);
-      }
-
       _loadFailed = false;
     });
   }
 
   @override
-  void onLoadStormsListError() {
+  void onLoadStormsListError(dynamic err) {
     _loadFailed = true;
+    print("Error occured: " + err.toString());
     // TODO: implement onLoadStormsListError
   }
 
@@ -68,17 +54,19 @@ class HomePageState extends State<HomePage> implements StormsListViewContract {
         title: new Logo(25.0, MainAxisAlignment.start),
       ),
       body: _buildStormsListBody(),
-      drawer: new Drawer(
-        child: new ListView(
-          children: <Widget>[
-            new ListTile(
-              title: new Text("Hello"),
-            )
-          ],
-        ),
-      ),
+      // drawer: new Drawer(
+      //   child: new ListView(
+      //     children: <Widget>[
+      //       new ListTile(
+      //         title: new Text("Hello"),
+      //       )
+      //     ],
+      //   ),
+      // ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () {
+          appUtil.gotoPage(context, new StormRecord(null), true);
+        },
         tooltip: 'Record a Storm',
         child: new Icon(Icons.add),
       ),
@@ -94,39 +82,37 @@ class HomePageState extends State<HomePage> implements StormsListViewContract {
       return new Center(child: CircularProgressIndicator());
     }
 
-    return new StickyList.builder(
-        itemCount: _stormsListGrouped.length,
-        builder: (BuildContext context, int index) {
-          final dynamic item = _stormsListGrouped[index];
-          final formatter = new DateFormat('dd/MMMM/yyyy');
-          final monthFormatter = new DateFormat('MMM');
+    if (_stormsList.isEmpty){
+      return new Text("");
+    }
 
-          if (item is int) {
-            return new HeaderRow(
-                child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      item.toString(),
-                      textScaleFactor: 1.5,
-                      style: new TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                new Divider(height: 2.0,)
-              ],
-            ));
-          }
-
-          Storm storm = item;
-
-          return RegularRow(
+    return new SideHeaderListView(
+      itemCount: _stormsList.length,
+      itemExtend: 100.0,
+      headerBuilder: (BuildContext context, int index) {
+        return new Padding(
+          padding: new EdgeInsets.all(10.0),
+          child: new Card(
+            child: new Padding(
+              padding: new EdgeInsets.all(2.0),
+              child: Text(
+                appUtil.getYear(_stormsList[index].startDatetime),
+                textScaleFactor: 1.2,
+              ),
+            ),
+          ),
+        );
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return new InkWell(
+            onTap: () {
+              appUtil.gotoPage(context,
+                  new StormRecord(_stormsList[index].startDatetime), true);
+            },
             child: new ListTile(
               leading: Container(
                 width: 40.0,
-                padding: new EdgeInsets.all(2.0),
+                padding: new EdgeInsets.all(1.0),
                 decoration: new BoxDecoration(
                   borderRadius: new BorderRadius.circular(10.0),
                   border: new Border.all(width: 2.0),
@@ -134,24 +120,30 @@ class HomePageState extends State<HomePage> implements StormsListViewContract {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      storm.startDatetime.day.toString(),
+                      appUtil.getDay(_stormsList[index].startDatetime),
                       textScaleFactor: 2.0,
                     ),
-                    Text(monthFormatter.format(storm.startDatetime))
+                    Text(
+                        appUtil.formatToMonth(_stormsList[index].startDatetime))
                   ],
                 ),
               ),
               title: new Row(
                 children: <Widget>[
-                  new Text(formatter.format(storm.startDatetime)),
+                  new Text(
+                      appUtil.formatDate(_stormsList[index].startDatetime)),
                   new Icon(Icons.arrow_right),
-                  new Text(formatter.format(storm.endDatetime)),
+                  new Text(appUtil.formatDate(_stormsList[index].endDatetime)),
                 ],
               ),
-              subtitle: new Text(storm.notes),
+              subtitle: new Text(_stormsList[index].notes ?? ""),
               isThreeLine: true,
-            ),
-          );
-        });
+            ));
+      },
+      hasSameHeader: (int a, int b) {
+        return _stormsList[a].startDatetime.year ==
+            _stormsList[b].startDatetime.year;
+      },
+    );
   }
 }

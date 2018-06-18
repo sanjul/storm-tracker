@@ -1,3 +1,4 @@
+import 'package:stormtr/data/database/storms_data_db.dart';
 import 'package:stormtr/data/mock/storms_data_mock.dart';
 import 'package:stormtr/data/storms_data.dart';
 
@@ -23,7 +24,7 @@ class Injector {
       case DataSource.MOCK:
         return new MockStormsData();
       default:
-        return null;
+        return new StormsDataDb();
     }
   }
 }
