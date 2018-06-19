@@ -68,26 +68,22 @@ class MockStormsData implements StormsData {
   }
 
   @override
-  Future<bool> saveStormRecord(Storm storm) {
-    for ( Storm oldst in _stormsList){
-      if(oldst.startDatetime == storm.startDatetime){
-        _stormsList.remove(oldst);
-        break;
-      }
+  Future<bool> saveStormRecord(int stormId, Storm storm) {
+    if(stormId == null){
+      _stormsList.add(storm);
+    } else {
+      _stormsList[stormId] = storm;
     }
-    _stormsList.add(storm);
+    
     return Future.value(true);
   }
 
   @override
-  Future<Storm> findStormRecord(DateTime startDatetime) {
+  Future<Storm> findStormRecord(int stormId) {
     Storm _foundItem;
-
-    for ( Storm storm in _stormsList){
-      if(storm.startDatetime == startDatetime){
-        _foundItem = storm;
-        break;
-      }
+    
+    if(stormId != null){
+       _foundItem = _stormsList[stormId];  
     }
 
     return Future.value(_foundItem);

@@ -29,9 +29,9 @@ class Storm {
 
 abstract class StormsData {
   Future<List<Storm>> fetchStormsList();
-  Future<bool> saveStormRecord(Storm storm);
+  Future<bool> saveStormRecord(int stormId, Storm storm);
   Future<bool> deleteStormRecord(Storm storm);
-  Future<Storm> findStormRecord(DateTime startDatetime);
+  Future<Storm> findStormRecord(int stormId);
 }
 
 class FetchDataException implements Exception {

@@ -9,7 +9,7 @@ void main() {
   );
 
   runApp(new MaterialApp(
-    home: new LandingPage(),
+    home: new LandingView(),
     theme: new ThemeData(
       primarySwatch: Colors.teal,
       brightness: Brightness.dark,

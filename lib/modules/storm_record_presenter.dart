@@ -20,20 +20,20 @@ class StormsRecordPresenter {
     _stormsData = new Injector().stormsData;
   }
 
-  Future loadStorm(DateTime startDatetime) async {
-    if (startDatetime == null){
+  Future loadStorm(int stormId) async {
+    if (stormId == null){
       _view.onLoadStormComplete(null);
     }
     _stormsData
-          .findStormRecord(startDatetime)
+          .findStormRecord(stormId)
            .then((record) => _view.onLoadStormComplete(record))
            .catchError((error) => _view.onError());
     
   }
 
-  Future saveStorm(Storm storm) async{
+  Future saveStorm(int stormId, Storm storm) async{
     _stormsData
-          .saveStormRecord(storm)
+          .saveStormRecord(stormId, storm)
           .then((isInserted) => _view.onSaveStormComplete(isInserted))
           .catchError((error) => _view.onError() );
   }

@@ -66,7 +66,7 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
       // ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          appUtil.gotoPage(context, new StormRecord(null), true);
+          appUtil.gotoPage(context, new StormRecordView(null), true);
         },
         tooltip: 'Record a Storm',
         child: new Icon(Icons.add),
@@ -108,7 +108,7 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
         return new InkWell(
             onTap: () {
               appUtil.gotoPage(context,
-                  new StormRecord(_stormsList[index].startDatetime), true);
+                  new StormRecordView(index), true);
             },
             child: new ListTile(
               leading: Container(

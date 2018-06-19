@@ -4,12 +4,12 @@ import 'package:stormtr/data/storms_data.dart';
 import 'database_helper.dart';
 
 class StormsDataDb implements StormsData {
-
-  static const String SQL_CREATE_TABLE_STORM_EVENT = "CREATE TABLE storm_event(" +
-        "id INTEGER PRIMARY KEY," +
-        "startDatetime TEXT," +
-        "endDatetime TEXT," +
-        "notes TEXT)";
+  static const String SQL_CREATE_TABLE_STORM_EVENT =
+      "CREATE TABLE storm_event(" +
+          "id INTEGER PRIMARY KEY," +
+          "startDatetime TEXT," +
+          "endDatetime TEXT," +
+          "notes TEXT)";
 
   @override
   Future<List<Storm>> fetchStormsList() async {
@@ -33,19 +33,25 @@ class StormsDataDb implements StormsData {
   }
 
   @override
-  Future<bool> saveStormRecord(Storm storm) async {
-    await deleteStormRecord(storm);
+  Future<bool> saveStormRecord(int stormId, Storm storm) async {
     var dbClient = await DatabaseHelper().db;
-    int res = await dbClient.insert("storm_event", storm.toMap());
+    int res;
+
+    if (stormId == null) {
+      res = await dbClient.insert("storm_event", storm.toMap());
+    } else {
+      res = await dbClient.update("storm_event", storm.toMap(),
+          where: "WHERE id=?", whereArgs: [stormId]);
+    }
+
     return Future.value(res > 0);
   }
 
   @override
-  Future<Storm> findStormRecord(DateTime startDatetime) async {
+  Future<Storm> findStormRecord(int stormId) async {
     var dbClient = await DatabaseHelper().db;
-    List<Map> listData = await dbClient.rawQuery(
-        "SELECT * FROM storm_event WHERE startDateTime = ?",
-        [startDatetime.toIso8601String()]);
+    List<Map> listData = await dbClient
+        .rawQuery("SELECT * FROM storm_event WHERE id = ?", [stormId]);
 
     if (listData == null || listData.isEmpty) {
       return Future.value(null);

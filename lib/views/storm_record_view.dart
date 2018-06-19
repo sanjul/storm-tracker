@@ -6,10 +6,10 @@ import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/modules/storm_record_presenter.dart';
 
 class StormRecordView extends StatefulWidget {
-  final DateTime _startDate;
-  StormRecordView(this._startDate);
+  final int _stormId;
+  StormRecordView(this._stormId);
 
-  DateTime get inputDate => _startDate;
+  int get inputStormId => _stormId;
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +34,7 @@ class StormRecordViewState extends State<StormRecordView>
   @override
   void initState() {
     super.initState();
-    _presenter.loadStorm(widget.inputDate);
+    _presenter.loadStorm(widget.inputStormId);
   }
 
   void _setStartDate() async {
@@ -79,7 +79,7 @@ class StormRecordViewState extends State<StormRecordView>
         return;
       }
 
-      _presenter.saveStorm(_storm);
+      _presenter.saveStorm(widget.inputStormId, _storm);
     }
   }
 
