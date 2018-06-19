@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/ui/database_helper.dart';
+import 'database_helper.dart';
 
 class StormsDataDb implements StormsData {
 
