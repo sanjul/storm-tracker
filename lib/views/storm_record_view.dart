@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/pages/home_page.dart';
+import 'package:stormtr/views/home_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
+import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/modules/storm_record_presenter.dart';
 
-class StormRecord extends StatefulWidget {
+class StormRecordView extends StatefulWidget {
   final DateTime _startDate;
-  StormRecord(this._startDate);
+  StormRecordView(this._startDate);
 
   DateTime get inputDate => _startDate;
 
   @override
   State<StatefulWidget> createState() {
-    return new StormRecordState();
+    return new StormRecordViewState();
   }
 }
 
-class StormRecordState extends State<StormRecord>
+class StormRecordViewState extends State<StormRecordView>
     implements StormsRecordViewContract {
   StormsRecordPresenter _presenter;
 
@@ -26,7 +27,7 @@ class StormRecordState extends State<StormRecord>
   BuildContext _context;
 
   //constructor
-  StormRecordState() {
+  StormRecordViewState() {
     _presenter = new StormsRecordPresenter(this);
   }
 
@@ -136,7 +137,7 @@ class StormRecordState extends State<StormRecord>
       new InkWell(
         child: Container(
             padding: new EdgeInsets.all(10.0),
-            child: new Text(appUtil.formatDate(displayDate))),
+            child: new Text(dateUtil.formatDate(displayDate))),
         onTap: callback,
       )
     ];
@@ -156,7 +157,7 @@ class StormRecordState extends State<StormRecord>
 
   @override
   void onSaveStormComplete(bool isInserted) {
-    appUtil.gotoPage(context, new HomePage());
+    appUtil.gotoPage(context, new HomeView());
   }
 }
 

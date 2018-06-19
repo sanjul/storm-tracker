@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../util/AppUtil.dart';
 import '../ui/logo.dart';
-import 'home_page.dart';
+import 'home_view.dart';
 
-class LandingPage extends StatefulWidget {
+class LandingView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LandingPageState();
+    return new LandingViewState();
   }
 }
 
-class LandingPageState extends State<LandingPage>
+class LandingViewState extends State<LandingView>
     with SingleTickerProviderStateMixin {
   Animation<double> _logoAnimation;
   AnimationController _logoAnimationController;
@@ -29,7 +29,7 @@ class LandingPageState extends State<LandingPage>
 
     _logoAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        appUtil.gotoPage(context, new HomePage());
+        appUtil.gotoPage(context, new HomeView());
       }
     });
   }

@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:stormtr/data/database/storms_data_db.dart';
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = new DatabaseHelper.internal();
   factory DatabaseHelper() => _instance;
@@ -28,11 +30,7 @@ class DatabaseHelper {
   }
 
   void _onCreate(Database db, int version) async {
-    await db.execute("CREATE TABLE storm_event(" +
-        "id INTEGER PRIMARY KEY," +
-        "startDatetime TEXT," +
-        "endDatetime TEXT," +
-        "notes TEXT)");
+    await db.execute(StormsDataDb.SQL_CREATE_TABLE_STORM_EVENT);
 
     print("Table storm_event is created");
   }

@@ -4,6 +4,13 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/ui/database_helper.dart';
 
 class StormsDataDb implements StormsData {
+
+  static const String SQL_CREATE_TABLE_STORM_EVENT = "CREATE TABLE storm_event(" +
+        "id INTEGER PRIMARY KEY," +
+        "startDatetime TEXT," +
+        "endDatetime TEXT," +
+        "notes TEXT)";
+
   @override
   Future<List<Storm>> fetchStormsList() async {
     var dbClient = await DatabaseHelper().db;

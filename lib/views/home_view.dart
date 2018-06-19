@@ -3,25 +3,26 @@ import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/modules/storms_list_presenter.dart';
-import 'package:stormtr/pages/storm_record_page.dart';
+import 'package:stormtr/views/storm_record_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
+import 'package:stormtr/util/DateUtil.dart';
 
 import '../ui/logo.dart';
 
-class HomePage extends StatefulWidget {
+class HomeView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new HomePageState();
+    return new HomeViewState();
   }
 }
 
-class HomePageState extends State<HomePage> implements StormsListViewContract {
+class HomeViewState extends State<HomeView> implements StormsListViewContract {
   StormsListPresenter _presenter;
   List<Storm> _stormsList;
   bool _loadFailed;
 
   //constructor
-  HomePageState() {
+  HomeViewState() {
     _presenter = new StormsListPresenter(this);
   }
 
@@ -96,7 +97,7 @@ class HomePageState extends State<HomePage> implements StormsListViewContract {
             child: new Padding(
               padding: new EdgeInsets.all(2.0),
               child: Text(
-                appUtil.getYear(_stormsList[index].startDatetime),
+                dateUtil.getYear(_stormsList[index].startDatetime),
                 textScaleFactor: 1.2,
               ),
             ),
@@ -120,20 +121,20 @@ class HomePageState extends State<HomePage> implements StormsListViewContract {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      appUtil.getDay(_stormsList[index].startDatetime),
+                      dateUtil.getDay(_stormsList[index].startDatetime),
                       textScaleFactor: 2.0,
                     ),
                     Text(
-                        appUtil.formatToMonth(_stormsList[index].startDatetime))
+                        dateUtil.formatToMonth(_stormsList[index].startDatetime))
                   ],
                 ),
               ),
               title: new Row(
                 children: <Widget>[
                   new Text(
-                      appUtil.formatDate(_stormsList[index].startDatetime)),
+                      dateUtil.formatDate(_stormsList[index].startDatetime)),
                   new Icon(Icons.arrow_right),
-                  new Text(appUtil.formatDate(_stormsList[index].endDatetime)),
+                  new Text(dateUtil.formatDate(_stormsList[index].endDatetime)),
                 ],
               ),
               subtitle: new Text(_stormsList[index].notes ?? ""),
