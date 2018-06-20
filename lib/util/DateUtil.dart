@@ -1,25 +1,33 @@
 import 'package:intl/intl.dart';
 
 class DateUtil {
-  final formatter = new DateFormat('dd/MMM/yyyy');
-  final monthFormatter = new DateFormat('MMM');
+  final fullDateFormat = new DateFormat('dd/MMM/yyyy');
+  final dayMonthFormat = new DateFormat('dd, MMM');
+  final monthFormat = new DateFormat('MMM');
 
   String formatDate(DateTime date) {
     if (date == null) {
       return "<date>";
     }
-    return formatter.format(date);
+    return fullDateFormat.format(date);
+  }
+
+  String formatToDayMonth(DateTime date) {
+    if (date == null) {
+      return "<date>";
+    }
+    return dayMonthFormat.format(date);
   }
 
   String getFormatedCurrentDate() {
-    return formatter.format(new DateTime.now());
+    return fullDateFormat.format(new DateTime.now());
   }
 
   String formatToMonth(DateTime date) {
     if (date == null) {
       return "M";
     }
-    return monthFormatter.format(date);
+    return monthFormat.format(date);
   }
 
   String getDay(DateTime date) {
@@ -31,7 +39,7 @@ class DateUtil {
 
   String getYear(DateTime date) {
     if (date == null) {
-      return "YYYY";
+      return "<Year>";
     }
     return date.year.toString();
   }

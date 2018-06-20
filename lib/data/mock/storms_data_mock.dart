@@ -5,58 +5,42 @@ import 'package:stormtr/data/storms_data.dart';
 class MockStormsData implements StormsData {
 
   static var _stormsList = <Storm>[
-    // new Storm(
-    //     startDatetime: DateTime.parse("2016-01-05 10:30:00"),
-    //     endDatetime: DateTime.parse("2016-06-09 10:00:00"),
-    //     notes: "The First storm ever"),
-    // new Storm(
-    //     startDatetime: DateTime.parse("2016-01-12 10:00:00"),
-    //     endDatetime: DateTime.parse("2016-08-15 10:00:00"),
-    //     notes: "The Third storm"),
-    // new Storm(
-    //     startDatetime: DateTime.parse("2016-07-06 10:00:00"),
-    //     endDatetime: DateTime.parse("2016-07-09 10:00:00"),
-    //     notes: "The Second storm"),
-    // new Storm(
-    //     startDatetime: DateTime.parse("2017-07-06 10:00:00"),
-    //     endDatetime: DateTime.parse("2017-07-09 10:00:00"),
-    //     notes: "The Second storm"),
-    // new Storm(
-    //     startDatetime: DateTime.parse("2017-07-06 10:00:00"),
-    //     endDatetime: DateTime.parse("2017-07-09 10:00:00"),
-    //     notes: "The Second storm"),
-    // new Storm(
-    //     startDatetime: DateTime.parse("2017-07-06 10:00:00"),
-    //     endDatetime: DateTime.parse("2017-07-09 10:00:00"),
-    //     notes: "The Second storm"),
+     new Storm(
+        startDatetime: DateTime.parse("2016-02-01 10:00:00"),
+        endDatetime: DateTime.parse("2016-02-05 10:00:00"),
+        notes: "Mock data, this is some storm data, that is worth a lot of lines, becuase why not?"
+        + "This is a new line, but we don't know much."
+        + "\n another new line. But storm is made of storms."
+        + "Mock data can have as much garbage text as you want,"
+        + "But we need a lot of lines here to make sure UI doesn't break"),
     new Storm(
-        startDatetime: DateTime.parse("2016-07-06 10:00:00"),
-        endDatetime: DateTime.parse("2016-07-09 10:00:00"),
-        notes: "The Second storm"),
+        startDatetime: DateTime.parse("2016-03-06 10:00:00"),
+        endDatetime: DateTime.parse("2016-03-09 10:00:00"),
+        notes: null),
     new Storm(
-        startDatetime: DateTime.parse("2016-07-06 10:00:00"),
-        endDatetime: DateTime.parse("2016-07-09 10:00:00"),
-        notes: "The Second storm"),
-    new Storm(
-        startDatetime: DateTime.parse("2016-07-06 10:00:00"),
-        endDatetime: DateTime.parse("2016-07-09 10:00:00"),
-        notes: "The Second storm"),
+        startDatetime: DateTime.parse("2016-01-10 10:00:00"),
+        endDatetime: DateTime.parse("2016-01-14 10:00:00"),
+        notes: ""),
     new Storm(
         startDatetime: DateTime.parse("2017-01-04 10:00:00"),
-        endDatetime: DateTime.parse("2017-01-08 10:00:00"),
-        notes: "The Second storm"),
+        endDatetime: null,
+        notes: "Mock data, tsunamis came this way"),
     new Storm(
-        startDatetime: DateTime.parse("2017-02-06 10:00:00"),
-        endDatetime: DateTime.parse("2017-02-09 10:00:00"),
-        notes: "The Second storm"),
+        startDatetime: DateTime.parse("2017-02-08 10:00:00"),
+        endDatetime: DateTime.parse("2017-02-12 10:00:00"),
+        notes: "Mock data, what else, storm, ahem..!"),
     new Storm(
         startDatetime: DateTime.parse("2017-03-06 10:00:00"),
         endDatetime: DateTime.parse("2017-03-09 10:00:00"),
-        notes: "The Second storm"),
+        notes: "Isn't storm's kinda stormy?"),
   ];
 
   @override
   Future<List<Storm>> fetchStormsList() {
+    for (int i = 0; i< _stormsList.length; i++){
+      _stormsList[i].id = i;
+    }
+
     return Future.value(_stormsList);
   }
 
@@ -68,22 +52,27 @@ class MockStormsData implements StormsData {
   }
 
   @override
-  Future<bool> saveStormRecord(int stormId, Storm storm) {
+  Future<int> saveStormRecord(int stormId, Storm storm) {
+    int _stormId = stormId;
     if(stormId == null){
       _stormsList.add(storm);
+      _stormId = _stormsList.indexOf(storm);
     } else {
-      _stormsList[stormId] = storm;
+      _stormsList[_stormId] = storm;
     }
     
-    return Future.value(true);
+    return Future.value(_stormId);
   }
 
   @override
   Future<Storm> findStormRecord(int stormId) {
     Storm _foundItem;
     
-    if(stormId != null){
-       _foundItem = _stormsList[stormId];  
+    for(Storm storm in _stormsList){
+      if(storm.id == stormId){
+        _foundItem = storm;  
+        break;
+      }
     }
 
     return Future.value(_foundItem);

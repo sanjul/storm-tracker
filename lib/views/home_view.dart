@@ -3,9 +3,10 @@ import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/modules/storms_list_presenter.dart';
+import 'package:stormtr/ui/storm_tile.dart';
+import 'package:stormtr/ui/year_header.dart';
 import 'package:stormtr/views/storm_record_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
-import 'package:stormtr/util/DateUtil.dart';
 
 import '../ui/logo.dart';
 
@@ -17,6 +18,8 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> implements StormsListViewContract {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   StormsListPresenter _presenter;
   List<Storm> _stormsList;
   bool _loadFailed;
@@ -32,25 +35,15 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
     _presenter.loadStormsList();
   }
 
-  @override
-  void onLoadStormsListComplete(List<Storm> stormsList) {
-    setState(() {
-      _stormsList = stormsList;
-      _stormsList.sort((a, b) => b.startDatetime.compareTo(a.startDatetime));
-      _loadFailed = false;
-    });
-  }
-
-  @override
-  void onLoadStormsListError(dynamic err) {
-    _loadFailed = true;
-    print("Error occured: " + err.toString());
-    // TODO: implement onLoadStormsListError
+  void onStormDismissCallBack(Storm storm) {
+    _presenter.deleteStorm(storm);
+    _presenter.loadStormsList();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: new Logo(25.0, MainAxisAlignment.start),
       ),
@@ -83,7 +76,7 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
       return new Center(child: CircularProgressIndicator());
     }
 
-    if (_stormsList.isEmpty){
+    if (_stormsList.isEmpty) {
       return new Text("");
     }
 
@@ -91,60 +84,47 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
       itemCount: _stormsList.length,
       itemExtend: 100.0,
       headerBuilder: (BuildContext context, int index) {
-        return new Padding(
-          padding: new EdgeInsets.all(10.0),
-          child: new Card(
-            child: new Padding(
-              padding: new EdgeInsets.all(2.0),
-              child: Text(
-                dateUtil.getYear(_stormsList[index].startDatetime),
-                textScaleFactor: 1.2,
-              ),
-            ),
-          ),
-        );
+        return new YearHeader(_stormsList[index]);
       },
       itemBuilder: (BuildContext context, int index) {
-        return new InkWell(
-            onTap: () {
-              appUtil.gotoPage(context,
-                  new StormRecordView(index), true);
-            },
-            child: new ListTile(
-              leading: Container(
-                width: 40.0,
-                padding: new EdgeInsets.all(1.0),
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10.0),
-                  border: new Border.all(width: 2.0),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      dateUtil.getDay(_stormsList[index].startDatetime),
-                      textScaleFactor: 2.0,
-                    ),
-                    Text(
-                        dateUtil.formatToMonth(_stormsList[index].startDatetime))
-                  ],
-                ),
-              ),
-              title: new Row(
-                children: <Widget>[
-                  new Text(
-                      dateUtil.formatDate(_stormsList[index].startDatetime)),
-                  new Icon(Icons.arrow_right),
-                  new Text(dateUtil.formatDate(_stormsList[index].endDatetime)),
-                ],
-              ),
-              subtitle: new Text(_stormsList[index].notes ?? ""),
-              isThreeLine: true,
-            ));
+        return new Card(
+            child: StormTile(
+          _stormsList[index],
+          () => onStormDismissCallBack(_stormsList[index]),
+        ));
       },
       hasSameHeader: (int a, int b) {
         return _stormsList[a].startDatetime.year ==
             _stormsList[b].startDatetime.year;
       },
     );
+  }
+
+  @override
+  void onLoadStormsListComplete(List<Storm> stormsList) {
+    setState(() {
+      _stormsList = stormsList;
+      _stormsList.sort((a, b) => b.startDatetime.compareTo(a.startDatetime));
+      _loadFailed = false;
+    });
+  }
+
+  @override
+  void onError(dynamic err) {
+    _loadFailed = true;
+    print("Error occured: " + err.toString());
+    // TODO: implement onLoadStormsListError
+  }
+
+  @override
+  void onStormDeleteComplete(bool isDeleted, Storm storm) {
+    
+    appUtil.showSnackBar(
+      _scaffoldKey.currentState,
+      "Storm is deleted",
+    );
+
+  // Update the state
+    setState(() {});
   }
 }

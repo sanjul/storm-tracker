@@ -1,6 +1,7 @@
 import 'dart:async';
 
 class Storm {
+  int id;
   DateTime startDatetime;
   DateTime endDatetime;
   String notes;
@@ -11,6 +12,7 @@ class Storm {
   Storm({this.startDatetime, this.endDatetime, this.notes});
 
   Storm.fromMap(Map<String, dynamic> map) {
+    id = map["id"];
     startDatetime = map['startDatetime'] != null? 
          DateTime.parse(map['startDatetime']) : null;
     endDatetime = map['endDatetime'] != null ? 
@@ -29,7 +31,7 @@ class Storm {
 
 abstract class StormsData {
   Future<List<Storm>> fetchStormsList();
-  Future<bool> saveStormRecord(int stormId, Storm storm);
+  Future<int> saveStormRecord(int stormId, Storm storm);
   Future<bool> deleteStormRecord(Storm storm);
   Future<Storm> findStormRecord(int stormId);
 }

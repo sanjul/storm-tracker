@@ -12,7 +12,7 @@ void main() {
     home: new LandingView(),
     theme: new ThemeData(
       primarySwatch: Colors.teal,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       // primaryColor: Colors.blueGrey,
       // accentColor: Colors.blue,
     ),

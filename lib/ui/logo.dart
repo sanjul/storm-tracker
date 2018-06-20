@@ -11,7 +11,7 @@ class Logo extends StatelessWidget {
     return new Row(
       children: <Widget>[
         new Text(
-          "storm",
+          "Storm",
           style: new TextStyle(
               fontSize: this._size,
               fontWeight: FontWeight.bold,

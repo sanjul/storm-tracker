@@ -33,30 +33,36 @@ class StormsDataDb implements StormsData {
   }
 
   @override
-  Future<bool> saveStormRecord(int stormId, Storm storm) async {
+  Future<int> saveStormRecord(int stormId, Storm storm) async {
     var dbClient = await DatabaseHelper().db;
-    int res;
+    int _stormId = stormId;
 
     if (stormId == null) {
-      res = await dbClient.insert("storm_event", storm.toMap());
+      _stormId = await dbClient.insert("storm_event", storm.toMap());
     } else {
-      res = await dbClient.update("storm_event", storm.toMap(),
-          where: "WHERE id=?", whereArgs: [stormId]);
+      int rowsUpdated = await dbClient.update("storm_event", storm.toMap(),
+          where: "id=?", whereArgs: [stormId]);
+     
+      print("No of rows updated =" + rowsUpdated.toString());
     }
 
-    return Future.value(res > 0);
+    return Future.value(_stormId);
   }
 
   @override
   Future<Storm> findStormRecord(int stormId) async {
-    var dbClient = await DatabaseHelper().db;
-    List<Map> listData = await dbClient
-        .rawQuery("SELECT * FROM storm_event WHERE id = ?", [stormId]);
+    Storm _foundItem;
 
-    if (listData == null || listData.isEmpty) {
-      return Future.value(null);
+    if (stormId != null) {
+      var dbClient = await DatabaseHelper().db;
+      List<Map> listData = await dbClient
+          .rawQuery("SELECT * FROM storm_event WHERE id = ?", [stormId]);
+
+      if (listData != null && listData.isNotEmpty) {
+        _foundItem = new Storm.fromMap(listData[0]);
+      }
     }
 
-    return Future.value(new Storm.fromMap(listData[0]));
+    return Future.value(_foundItem);
   }
 }

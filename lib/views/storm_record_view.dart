@@ -23,6 +23,8 @@ class StormRecordViewState extends State<StormRecordView>
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final notesController = new TextEditingController();
   Storm _storm;
   BuildContext _context;
 
@@ -73,6 +75,8 @@ class StormRecordViewState extends State<StormRecordView>
 
   void _onFormSubmit() {
     if (_formKey.currentState.validate()) {
+      _storm.notes = notesController.text;
+
       if (_storm.startDatetime == null) {
         appUtil.showSnackBar(
             _scaffoldKey.currentState, "Please select start date");
@@ -103,10 +107,11 @@ class StormRecordViewState extends State<StormRecordView>
                   _row(_dateField(
                       "Start Date", _storm.startDatetime, _setStartDate)),
                   _row(_dateField("End Date", _storm.endDatetime, _setEndDate)),
+                  _notesField(),
                   new Container(
                       padding: const EdgeInsets.all(10.0),
                       child: new RaisedButton(
-                        child: const Text('Submit'),
+                        child: const Text('Save'),
                         onPressed: _onFormSubmit,
                       )),
                 ]),
@@ -133,14 +138,62 @@ class StormRecordViewState extends State<StormRecordView>
   List<Widget> _dateField(
       String label, DateTime displayDate, VoidCallback callback) {
     return <Widget>[
-      new Text(label),
+      new Row(
+        children: <Widget>[
+          new Icon(Icons.calendar_today),
+          new Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: new Text(label),
+          ),
+        ],
+      ),
       new InkWell(
         child: Container(
-            padding: new EdgeInsets.all(10.0),
+            width: 200.0,
+            margin: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(10.0),
+            decoration: new BoxDecoration(
+                border: new Border.all(color: Theme.of(context).accentColor)),
             child: new Text(dateUtil.formatDate(displayDate))),
         onTap: callback,
       )
     ];
+  }
+
+  Widget _notesField() {
+    notesController.text = _storm.notes;
+    TextField _notesInputField = TextField(
+      controller: notesController,
+      maxLines: 5,
+      decoration: const InputDecoration(
+        hintText: 'Enter your notes about this storm',
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.all(10.0),
+      ),
+    );
+
+    return new Column(
+      children: <Widget>[
+        new Padding(
+            padding: EdgeInsets.only(left: 20.0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Icon(Icons.text_fields),
+                new Text(" Enter your notes:"),
+              ],
+            )),
+        new Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 10.0,
+            bottom: 20.0,
+          ),
+          child: _notesInputField,
+        ),
+      ],
+    );
   }
 
   @override
@@ -151,12 +204,12 @@ class StormRecordViewState extends State<StormRecordView>
   }
 
   @override
-  void onError() {
-    // TODO: implement onError
+  void onError(error) {
+    appUtil.showSnackBar(_scaffoldKey.currentState, "Error:" + error);
   }
 
   @override
-  void onSaveStormComplete(bool isInserted) {
+  void onSaveStormComplete(int stormId) {
     appUtil.gotoPage(context, new HomeView());
   }
 }

@@ -1,4 +1,4 @@
-package com.example.stormtr;
+package com.teddycakes.stormtr;
 
 import android.os.Bundle;
 

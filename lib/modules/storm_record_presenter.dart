@@ -5,9 +5,9 @@ import 'package:stormtr/dependency_injection.dart';
 
 abstract class StormsRecordViewContract {
   void onLoadStormComplete(Storm storm);
-  void onError();
+  void onError(String error);
 
-  void onSaveStormComplete(bool isInserted);
+  void onSaveStormComplete(int stormId);
 
 
 }
@@ -21,20 +21,21 @@ class StormsRecordPresenter {
   }
 
   Future loadStorm(int stormId) async {
+    print("Storm ID  =" + stormId.toString());
     if (stormId == null){
       _view.onLoadStormComplete(null);
     }
     _stormsData
           .findStormRecord(stormId)
            .then((record) => _view.onLoadStormComplete(record))
-           .catchError((error) => _view.onError());
+           .catchError((error) => _view.onError(error));
     
   }
 
   Future saveStorm(int stormId, Storm storm) async{
     _stormsData
           .saveStormRecord(stormId, storm)
-          .then((isInserted) => _view.onSaveStormComplete(isInserted))
-          .catchError((error) => _view.onError() );
+          .then((stormId) => _view.onSaveStormComplete(stormId))
+          .catchError((error) => _view.onError(error) );
   }
 }
