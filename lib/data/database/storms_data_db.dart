@@ -9,7 +9,9 @@ class StormsDataDb implements StormsData {
           "id INTEGER PRIMARY KEY," +
           "startDatetime TEXT," +
           "endDatetime TEXT," +
-          "notes TEXT)";
+          "notes TEXT," +
+          "intensity INT," + 
+          "flux INT)";
 
   @override
   Future<List<Storm>> fetchStormsList() async {

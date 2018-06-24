@@ -30,7 +30,6 @@ class YearHeaderState extends State<YearHeader> {
         padding: new EdgeInsetsDirectional.only(end: 10.0),
         child: new Row(
           children: [
-            new Icon(Icons.timeline),
             new Card(
               child: new Padding(
                 padding: new EdgeInsets.all(2.0),
@@ -40,7 +39,7 @@ class YearHeaderState extends State<YearHeader> {
                 ),
               ),
             ),
-            new Icon(Icons.blur_on),
+            new Icon(Icons.adjust),
           ],
         ),
       ),

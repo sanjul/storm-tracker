@@ -5,11 +5,13 @@ class Storm {
   DateTime startDatetime;
   DateTime endDatetime;
   String notes;
+  int intensity;
+  int flux;
 
   String get startDateDB => startDatetime.toIso8601String();
   String get endDateDB => endDatetime.toIso8601String();
 
-  Storm({this.startDatetime, this.endDatetime, this.notes});
+  Storm({this.startDatetime, this.endDatetime, this.notes, this.intensity, this.flux});
 
   Storm.fromMap(Map<String, dynamic> map) {
     id = map["id"];
@@ -18,13 +20,17 @@ class Storm {
     endDatetime = map['endDatetime'] != null ? 
          DateTime.parse(map['endDatetime']) : null;
     notes = map['notes'];
+    intensity = map['intensity'];
+    flux = map['flux'];
   }
 
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
-    map["startDatetime"] = startDatetime != null ? startDatetime.toIso8601String() : null;
-    map["endDatetime"] = endDatetime != null ? endDatetime.toIso8601String() : null;
-    map["notes"] = notes;
+    map['startDatetime'] = startDatetime != null ? startDatetime.toIso8601String() : null;
+    map['endDatetime'] = endDatetime != null ? endDatetime.toIso8601String() : null;
+    map['notes'] = notes;
+    map['intensity'] = intensity;
+    map['flux'] = flux;
     return map;
   }
 }

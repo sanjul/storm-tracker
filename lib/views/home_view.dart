@@ -77,7 +77,18 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
     }
 
     if (_stormsList.isEmpty) {
-      return new Text("");
+      return Center(
+        child: Material(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Icon(Icons.flag),
+              new Text("Let's start fresh!", textScaleFactor: 2.5),
+              new Text("Tap on the + icon to add a new record"),
+            ],
+          ),
+        ),
+      );
     }
 
     return new SideHeaderListView(
@@ -118,13 +129,17 @@ class HomeViewState extends State<HomeView> implements StormsListViewContract {
 
   @override
   void onStormDeleteComplete(bool isDeleted, Storm storm) {
-    
     appUtil.showSnackBar(
-      _scaffoldKey.currentState,
-      "Storm is deleted",
-    );
+        _scaffoldKey.currentState, "Storm record deleted!", "Undo", () {
+      _presenter
+          .undoStormDelete(storm)
+          .then((a) => _presenter.loadStormsList());
+    });
+  }
 
-  // Update the state
+  @override
+  void onStormDeleteUndoComplete(Storm storm, int newStormId) {
+    appUtil.showSnackBar(_scaffoldKey.currentState, "Storm record restored!");
     setState(() {});
   }
 }

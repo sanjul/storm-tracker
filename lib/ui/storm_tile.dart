@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/util/AppUtil.dart';
@@ -32,7 +34,11 @@ class StormTileState extends State<StormTile> {
       },
       child: new Dismissible(
         key: new Key(stormId.toString()),
-        onDismissed:(dir){
+        background: new Material(
+          color: Colors.red.shade300,
+          child: new Icon(Icons.delete_sweep, size: 40.0,),
+        ),
+        onDismissed: (dir) {
           print("Dismissed to : " + dir.toString());
           widget.onDismiss();
         },
@@ -42,54 +48,116 @@ class StormTileState extends State<StormTile> {
   }
 
   Widget _buildListTile(Storm storm) {
-    return new ListTile(
-      leading: Container(
-        width: 40.0,
-        padding: new EdgeInsets.all(1.0),
-        decoration: new BoxDecoration(
-          borderRadius: new BorderRadius.circular(10.0),
-          border: new Border.all(width: 2.0),
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              dateUtil.getDay(storm.startDatetime),
-              textScaleFactor: 2.0,
-            ),
-            Text(dateUtil.formatToMonth(storm.startDatetime))
-          ],
-        ),
+    return Material(
+      elevation: 10.0,
+      child: new ListTile(
+        leading: _buildDateRange(storm.startDatetime, storm.endDatetime),
+        title: new Row(children: <Widget>[
+          _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
+          new SizedBox(width:5.0),
+          _buildLevelIconDisplay(Icons.cloud, storm.flux),
+        ],),
+        subtitle: _buildNoteText(storm.notes),
+        isThreeLine: true,
       ),
-      title: new Row(
+    );
+  }
+
+  Widget _buildDateRange(DateTime startDate, DateTime endDate) {
+    int _random = new Random().nextInt(Colors.primaries.length);
+    return new Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        _buildDateBubble(startDate, _random),
+        new Icon(Icons.chevron_right),
+        _buildDateBubble(endDate, _random),
+      ],
+    );
+  }
+
+  Widget _buildDateBubble(DateTime date, int color) {
+    Color bubbleColor;
+    Widget bubbleChild;
+    String month;
+    double spaceHeight;
+
+    if (date == null) {
+      bubbleColor = Colors.grey.shade300;
+      bubbleChild = new Icon(Icons.help);
+      month = "";
+      spaceHeight = 0.0;
+    } else {
+      bubbleColor = Colors.primaries[color];
+      bubbleChild = Text(
+        dateUtil.getDay(date),
+        style: TextStyle(fontWeight: FontWeight.bold),
+      );
+      month = dateUtil.formatToMonth(date);
+      spaceHeight = 4.0;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(dateUtil.formatToDayMonth(storm.startDatetime)),
-          new Icon(Icons.arrow_right),
-          new Text(dateUtil.formatToDayMonth(storm.endDatetime)),
+          CircleAvatar(
+            backgroundColor: bubbleColor,
+            radius: 20.0,
+            child: bubbleChild,
+          ),
+          SizedBox(
+            height: spaceHeight,
+          ),
+          Text(
+            month,
+          )
         ],
       ),
-      subtitle: _buildNoteText(storm.notes ?? ""),
-      isThreeLine: true,
     );
   }
 
   Widget _buildNoteText(String notes) {
-    List<Widget> rowChildren = new List<Widget>();
+    List<Widget> _children = new List<Widget>();
 
-    // rowChildren.add(
-    //   new Padding(
-    //     padding: new EdgeInsets.only(right: 7.0),
-    //     child: new Icon(
-    //       Icons.mode_comment,
-    //       size: 15.0,
-    //     ),
-    //   ),
-    // );
+    if (notes == null || notes == "") {
+      return new SizedBox(
+        width: 0.0,
+        height: 0.0,
+      );
+    }
 
-    rowChildren.add(new Text(
-      notes,
+    _children.add(new Text(
+      notes ?? "",
       maxLines: 2,
     ));
 
-    return new Wrap(children: rowChildren);
+    return Material(
+      elevation: 4.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: new Wrap(
+          children: _children,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLevelIconDisplay(IconData icon, int value) {
+    int level = value != null ? value : 0;
+
+    List<Widget> list = new List<Widget>();
+    for (int i = 1; i <= 5; i++) {
+      list.add(new Icon(
+        icon,
+        size: 17.0,
+        color: i <= level ? Colors.red : Colors.grey.shade300,
+      ));
+    }
+
+    return new Card(
+      child: Wrap(children:list),
+    );
   }
 }

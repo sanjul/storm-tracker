@@ -17,23 +17,41 @@ class AppUtil {
     Navigator.of(context).pop();
   }
 
+  void showSnackBar(ScaffoldState state, String message,
+      [String actionLabel, VoidCallback actionCallBack]) {
+    List<Widget> _children = <Widget>[
+      new Icon(Icons.info),
+      new Text(
+        message,
+        textScaleFactor: 1.3,
+      ),
+    ];
 
+    SnackBarAction _action;
 
-  void showSnackBar(ScaffoldState state, String message) {
+    int _delay = 2;
+    if (actionLabel != null && actionCallBack != null) {
+      _action = new SnackBarAction(
+        label: actionLabel,
+        onPressed: () {
+          state.hideCurrentSnackBar();
+          actionCallBack();
+        },
+      );
+
+      _delay = 10;
+    }
+
     state.showSnackBar(
       new SnackBar(
+        action: _action,
+        duration: Duration(seconds: _delay),
         content: new Card(
             child: new Padding(
           padding: EdgeInsets.all(10.0),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              new Icon(Icons.info),
-              new Text(
-                message,
-                textScaleFactor: 1.3,
-              ),
-            ],
+            children: _children,
           ),
         )),
       ),

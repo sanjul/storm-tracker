@@ -90,10 +90,17 @@ class StormRecordViewState extends State<StormRecordView>
   @override
   Widget build(BuildContext context) {
     _context = context;
+
+    Widget _saveButton = new FlatButton(
+      onPressed: _onFormSubmit,
+      child: new Icon(Icons.done),
+    );
+
     return new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: new Text("Record Storm Details"),
+        title: new Text("Storm Details"),
+        actions: <Widget>[_saveButton],
       ),
       body: _storm == null
           ? new CircularProgressIndicator()
@@ -107,13 +114,27 @@ class StormRecordViewState extends State<StormRecordView>
                   _row(_dateField(
                       "Start Date", _storm.startDatetime, _setStartDate)),
                   _row(_dateField("End Date", _storm.endDatetime, _setEndDate)),
+                  _row(
+                    _buildSlider(
+                      text: 'Intensity',
+                      icon: Icons.flash_on,
+                      value: _storm.intensity,
+                      callback: (intensity) {
+                        _storm.intensity = intensity;
+                      },
+                    ),
+                  ),
+                  _row(
+                    _buildSlider(
+                      text: 'Flux',
+                      icon: Icons.cloud,
+                      value: _storm.flux,
+                      callback: (flux) {
+                        _storm.flux = flux;
+                      },
+                    ),
+                  ),
                   _notesField(),
-                  new Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: new RaisedButton(
-                        child: const Text('Save'),
-                        onPressed: _onFormSubmit,
-                      )),
                 ]),
               ),
             ),
@@ -149,12 +170,17 @@ class StormRecordViewState extends State<StormRecordView>
       ),
       new InkWell(
         child: Container(
-            width: 200.0,
-            margin: const EdgeInsets.all(5.0),
-            padding: const EdgeInsets.all(10.0),
-            decoration: new BoxDecoration(
-                border: new Border.all(color: Theme.of(context).accentColor)),
-            child: new Text(dateUtil.formatDate(displayDate))),
+          width: 200.0,
+          margin: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(10.0),
+          decoration: new BoxDecoration(
+              border: new Border.all(color: Theme.of(context).accentColor)),
+          child: new Text(
+            displayDate != null
+                ? dateUtil.formatDate(displayDate)
+                : 'Tap to set date',
+          ),
+        ),
         onTap: callback,
       )
     ];
@@ -196,6 +222,31 @@ class StormRecordViewState extends State<StormRecordView>
     );
   }
 
+  List<Widget> _buildSlider(
+      {String text, IconData icon, int value, ValueSetter<int> callback}) {
+    return <Widget>[
+      new Row(
+        children: <Widget>[
+          new Icon(icon),
+          new Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: new Text(text),
+          ),
+        ],
+      ),
+      new Slider(
+        onChanged: (double value) {
+          setState(() {
+            callback(value.toInt());
+          });
+        },
+        value: value != null ? value.toDouble() : 0.0,
+        max: 5.0,
+        min: 0.0,
+      )
+    ];
+  }
+
   @override
   void onLoadStormComplete(Storm storm) {
     setState(() {
@@ -213,48 +264,3 @@ class StormRecordViewState extends State<StormRecordView>
     appUtil.gotoPage(context, new HomeView());
   }
 }
-
-// child: new ListView(
-//   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//   children: <Widget>[
-//     new Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       children: <Widget>[
-//         new Icon(Icons.calendar_today),
-//         new Padding(padding: new EdgeInsetsDirectional.only(start: 15.0),
-//          child: new Text("Start"),),
-// new InkWell(
-//   child: new Text(appUtil.getFormatedCurrentDate()),
-//   onTap: () async {
-//     final DateTime picked = await showDatePicker(
-//         context: context,
-//         initialDate: DateTime.now(),
-//         firstDate: new DateTime(2016),
-//         lastDate: DateTime.now());
-
-//     print("Date selected = " + picked.toString());
-//   },
-//         ),
-//       ],
-//     ),
-//     new TextFormField(
-//       decoration: const InputDecoration(
-//         icon: const Icon(Icons.calendar_today),
-//         hintText: 'Enter when the storm ended',
-//         labelText: 'End',
-//       ),
-//     ),
-// new TextFormField(
-//   decoration: const InputDecoration(
-//     icon: const Icon(Icons.description),
-//     hintText: 'Enter your notes about this storm',
-//     labelText: 'Notes',
-//   ),
-// ),
-// new Container(
-//     padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-//     child: new RaisedButton(
-//       child: const Text('Submit'),
-//       onPressed: null,
-//     )),
-//   ],

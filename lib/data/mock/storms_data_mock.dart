@@ -12,15 +12,19 @@ class MockStormsData implements StormsData {
         + "This is a new line, but we don't know much."
         + "\n another new line. But storm is made of storms."
         + "Mock data can have as much garbage text as you want,"
-        + "But we need a lot of lines here to make sure UI doesn't break"),
+        + "But we need a lot of lines here to make sure UI doesn't break",
+        intensity: 3,
+        flux:2),
     new Storm(
         startDatetime: DateTime.parse("2016-03-06 10:00:00"),
         endDatetime: DateTime.parse("2016-03-09 10:00:00"),
-        notes: null),
+        notes: null,
+        flux:2),
     new Storm(
         startDatetime: DateTime.parse("2016-01-10 10:00:00"),
         endDatetime: DateTime.parse("2016-01-14 10:00:00"),
-        notes: ""),
+        notes: "",
+        intensity:5),
     new Storm(
         startDatetime: DateTime.parse("2017-01-04 10:00:00"),
         endDatetime: null,

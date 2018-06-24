@@ -6,6 +6,7 @@ import 'package:stormtr/dependency_injection.dart';
 abstract class StormsListViewContract {
   void onLoadStormsListComplete(List <Storm> stormsList);
   void onStormDeleteComplete(bool isDeleted, Storm storm);
+  void onStormDeleteUndoComplete(Storm storm, int newStormId);
   void onError(dynamic error);
 }
 
@@ -31,5 +32,11 @@ class StormsListPresenter {
     .then((isDeleted) => _view.onStormDeleteComplete(isDeleted, storm))
     .catchError((error) => _view.onError(error));
     
+  }
+
+  Future undoStormDelete(Storm storm) async{
+    _stormsData.saveStormRecord(null, storm)
+    .then((newStormId) => _view.onStormDeleteUndoComplete(storm, newStormId))
+    .catchError((error) => _view.onError(error));
   }
 }
