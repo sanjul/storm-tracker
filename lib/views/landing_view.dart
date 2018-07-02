@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:stormtr/views/navigation/app_navigator_view.dart';
 import '../util/AppUtil.dart';
 import '../ui/logo.dart';
-import 'home_view.dart';
 
 class LandingView extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class LandingViewState extends State<LandingView>
 
     _logoAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        appUtil.gotoPage(context, new HomeView());
+        appUtil.gotoPage(context, new AppNavigatorView());
       }
     });
   }

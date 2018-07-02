@@ -23,12 +23,15 @@ class StormTile extends StatefulWidget {
 }
 
 class StormTileState extends State<StormTile> {
+  final GlobalKey<StormTileState> _tileKey = new GlobalKey<StormTileState>();
+
   @override
   Widget build(BuildContext context) {
     Storm storm = widget.storm;
     int stormId = storm.id;
 
     return new InkWell(
+      key: _tileKey,
       onTap: () {
         appUtil.gotoPage(context, new StormRecordView(stormId), true);
       },
@@ -36,7 +39,10 @@ class StormTileState extends State<StormTile> {
         key: new Key(stormId.toString()),
         background: new Material(
           color: Colors.red.shade300,
-          child: new Icon(Icons.delete_sweep, size: 40.0,),
+          child: new Icon(
+            Icons.delete_sweep,
+            size: 40.0,
+          ),
         ),
         onDismissed: (dir) {
           print("Dismissed to : " + dir.toString());
@@ -49,18 +55,19 @@ class StormTileState extends State<StormTile> {
 
   Widget _buildListTile(Storm storm) {
     return Material(
-      elevation: 10.0,
-      child: new ListTile(
-        leading: _buildDateRange(storm.startDatetime, storm.endDatetime),
-        title: new Row(children: <Widget>[
-          _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
-          new SizedBox(width:5.0),
-          _buildLevelIconDisplay(Icons.cloud, storm.flux),
-        ],),
-        subtitle: _buildNoteText(storm.notes),
-        isThreeLine: true,
-      ),
-    );
+        elevation: 10.0,
+        child: ListTile(
+          title: new Wrap(
+            children: [
+              _buildDateRange(storm.startDatetime, storm.endDatetime),
+              new Column(children: [
+                _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
+                _buildLevelIconDisplay(Icons.cloud, storm.flux),
+              ]),
+              _buildNoteText(storm.notes),
+            ],
+          ),
+        ));
   }
 
   Widget _buildDateRange(DateTime startDate, DateTime endDate) {
@@ -119,7 +126,6 @@ class StormTileState extends State<StormTile> {
   }
 
   Widget _buildNoteText(String notes) {
-    List<Widget> _children = new List<Widget>();
 
     if (notes == null || notes == "") {
       return new SizedBox(
@@ -128,19 +134,18 @@ class StormTileState extends State<StormTile> {
       );
     }
 
-    _children.add(new Text(
-      notes ?? "",
-      maxLines: 2,
-    ));
-
-    return Material(
-      elevation: 4.0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: new Wrap(
-          children: _children,
-        ),
-      ),
+    return IconButton(
+      onPressed: () {
+        showDialog(
+            builder: (BuildContext context) {
+              return new Dialog(
+                child: Padding(padding:EdgeInsets.all(8.0),
+                child: Text(notes),),
+              );
+            },
+            context: _tileKey.currentContext);
+      },
+      icon: Icon(Icons.text_fields),
     );
   }
 
@@ -157,7 +162,10 @@ class StormTileState extends State<StormTile> {
     }
 
     return new Card(
-      child: Wrap(children:list),
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Wrap(children: list),
+      ),
     );
   }
 }

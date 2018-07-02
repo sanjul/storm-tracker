@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/views/home_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/modules/storm_record_presenter.dart';
@@ -91,9 +90,9 @@ class StormRecordViewState extends State<StormRecordView>
   Widget build(BuildContext context) {
     _context = context;
 
-    Widget _saveButton = new FlatButton(
+    Widget _saveButton = new IconButton(
       onPressed: _onFormSubmit,
-      child: new Icon(Icons.done),
+      icon: new Icon(Icons.done),
     );
 
     return new Scaffold(
@@ -261,6 +260,6 @@ class StormRecordViewState extends State<StormRecordView>
 
   @override
   void onSaveStormComplete(int stormId) {
-    appUtil.gotoPage(context, new HomeView());
+    appUtil.popPage(context);
   }
 }
