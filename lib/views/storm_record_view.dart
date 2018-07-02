@@ -260,6 +260,6 @@ class StormRecordViewState extends State<StormRecordView>
 
   @override
   void onSaveStormComplete(int stormId) {
-    appUtil.popPage(context);
+    appUtil.popPage(context, this._storm);
   }
 }

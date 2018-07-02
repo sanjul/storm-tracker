@@ -1,20 +1,32 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AppUtil {
-  void gotoPage(BuildContext context, Widget target,
-      [bool allowGoingBack = false]) {
+
+  dynamic gotoPage(BuildContext context, Widget target,
+      [bool allowGoingBack = false]) async {
+
+    dynamic result;    
     if (allowGoingBack) {
-      Navigator.of(context).push(
+      result = await Navigator.of(context).push(
           new MaterialPageRoute(builder: (BuildContext context) => target));
     } else {
-      Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(builder: (BuildContext context) => target),
+      result = await Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute<dynamic> (builder: (BuildContext context) => target),
           (Route route) => route == null);
     }
+
+    return result;
   }
 
-  void popPage(BuildContext context) {
-    Navigator.of(context).pop();
+  void popPage(BuildContext context, [dynamic result]) {
+    try {
+      Navigator.pop(context, result);
+    } catch(e){
+      print('Failed popping page : ' + e.toString());
+    }
+    
   }
 
   void showSnackBar(ScaffoldState state, String message,

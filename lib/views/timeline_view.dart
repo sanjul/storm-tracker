@@ -8,7 +8,6 @@ import 'package:stormtr/ui/year_header.dart';
 import 'package:stormtr/views/storm_record_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
 
-
 class TimelineView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +15,8 @@ class TimelineView extends StatefulWidget {
   }
 }
 
-class TimelineViewState extends State<TimelineView> implements StormsListViewContract {
+class TimelineViewState extends State<TimelineView>
+    implements StormsListViewContract {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   StormsListPresenter _presenter;
@@ -45,8 +45,12 @@ class TimelineViewState extends State<TimelineView> implements StormsListViewCon
       key: _scaffoldKey,
       body: _buildStormsListBody(),
       floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          appUtil.gotoPage(context, new StormRecordView(null), true);
+        onPressed: () async {
+          Storm result =
+              await appUtil.gotoPage(context, new StormRecordView(null), true);
+          if (result != null) {
+            _presenter.loadStormsList();
+          }
         },
         tooltip: 'Record a Storm',
         child: new Icon(Icons.add),
@@ -86,10 +90,12 @@ class TimelineViewState extends State<TimelineView> implements StormsListViewCon
       },
       itemBuilder: (BuildContext context, int index) {
         return new Card(
-            child: StormTile(
-          _stormsList[index],
-          () => onStormDismissCallBack(_stormsList[index]),
-        ));
+          child: StormTile(
+            storm: _stormsList[index],
+            onDismiss: () => onStormDismissCallBack(_stormsList[index]), 
+            onSave: () => _presenter.loadStormsList(),
+          ),
+        );
       },
       hasSameHeader: (int a, int b) {
         return _stormsList[a].startDatetime.year ==

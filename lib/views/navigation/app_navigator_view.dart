@@ -52,7 +52,7 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
       appBar: new AppBar(
         title: Text(_currentView != null ? _currentView.title : null),
       ),
-      body: _currentView.build(),
+      body: _currentView.builder(),
       drawer: AppDrawer(this),
     );
   }

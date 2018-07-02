@@ -8,8 +8,8 @@ class Storm {
   int intensity;
   int flux;
 
-  String get startDateDB => startDatetime.toIso8601String();
-  String get endDateDB => endDatetime.toIso8601String();
+  String get startDateDB => startDatetime != null ? startDatetime.toIso8601String() : null;
+  String get endDateDB => endDatetime != null ? endDatetime.toIso8601String() : null;
 
   Storm({this.startDatetime, this.endDatetime, this.notes, this.intensity, this.flux});
 

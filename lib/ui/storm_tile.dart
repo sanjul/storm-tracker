@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,14 +8,13 @@ import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/views/storm_record_view.dart';
 
 class StormTile extends StatefulWidget {
-  final Storm _storm;
-  final VoidCallback _onDismiss;
-
-  Storm get storm => _storm;
-  VoidCallback get onDismiss => _onDismiss;
+  final Storm storm;
+  final VoidCallback onDismiss;
+  final VoidCallback onSave;
 
   // constructor
-  StormTile(this._storm, this._onDismiss);
+  StormTile(
+      {@required this.storm, @required this.onDismiss, @required this.onSave});
 
   @override
   StormTileState createState() {
@@ -27,13 +27,17 @@ class StormTileState extends State<StormTile> {
 
   @override
   Widget build(BuildContext context) {
-    Storm storm = widget.storm;
-    int stormId = storm.id;
+    int stormId = widget.storm.id;
 
     return new InkWell(
       key: _tileKey,
-      onTap: () {
-        appUtil.gotoPage(context, new StormRecordView(stormId), true);
+      onTap: () async {
+        Storm result =
+            await appUtil.gotoPage(context, new StormRecordView(stormId), true);
+
+        if (result != null) {
+          widget.onSave();
+        }
       },
       child: new Dismissible(
         key: new Key(stormId.toString()),
@@ -48,7 +52,7 @@ class StormTileState extends State<StormTile> {
           print("Dismissed to : " + dir.toString());
           widget.onDismiss();
         },
-        child: _buildListTile(storm),
+        child: _buildListTile(widget.storm),
       ),
     );
   }
@@ -126,7 +130,6 @@ class StormTileState extends State<StormTile> {
   }
 
   Widget _buildNoteText(String notes) {
-
     if (notes == null || notes == "") {
       return new SizedBox(
         width: 0.0,
@@ -139,8 +142,10 @@ class StormTileState extends State<StormTile> {
         showDialog(
             builder: (BuildContext context) {
               return new Dialog(
-                child: Padding(padding:EdgeInsets.all(8.0),
-                child: Text(notes),),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(notes),
+                ),
               );
             },
             context: _tileKey.currentContext);
