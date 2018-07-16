@@ -11,10 +11,10 @@ class StormTile extends StatefulWidget {
   final Storm storm;
   final VoidCallback onDismiss;
   final VoidCallback onSave;
+  final VoidCallback onStopStorm;
 
   // constructor
-  StormTile(
-      {@required this.storm, @required this.onDismiss, @required this.onSave});
+  StormTile({@required this.storm, this.onDismiss, this.onSave, this.onStopStorm});
 
   @override
   StormTileState createState() {
@@ -39,27 +39,26 @@ class StormTileState extends State<StormTile> {
           widget.onSave();
         }
       },
-      child: new Dismissible(
-        key: new Key(stormId.toString()),
-        background: new Material(
-          color: Colors.red.shade300,
-          child: new Icon(
-            Icons.delete_sweep,
-            size: 40.0,
-          ),
-        ),
-        onDismissed: (dir) {
-          print("Dismissed to : " + dir.toString());
-          widget.onDismiss();
-        },
-        child: _buildListTile(widget.storm),
-      ),
+      child: widget.onDismiss == null
+          ? _buildListTile(widget.storm)
+          : new Dismissible(
+              key: new Key(stormId.toString()),
+              background: new Material(
+                color: Colors.red.shade300,
+                child: new Icon(
+                  Icons.delete_sweep,
+                  size: 40.0,
+                ),
+              ),
+              onDismissed: (dir) => widget.onDismiss(),
+              child: _buildListTile(widget.storm),
+            ),
     );
   }
 
   Widget _buildListTile(Storm storm) {
     return Material(
-        elevation: 10.0,
+        elevation: 4.0,
         child: ListTile(
           title: new Wrap(
             children: [
@@ -71,6 +70,7 @@ class StormTileState extends State<StormTile> {
               _buildNoteText(storm.notes),
             ],
           ),
+          trailing: widget.onStopStorm == null ? null : Text('stop'),
         ));
   }
 

@@ -40,8 +40,8 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
       ),
     ];
 
-    /* Set timeline view as the default view */
-    _currentView = _views[1];
+    /* Set Home view as the default view */
+    _currentView = _views[0];
 
     super.initState();
   }
