@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
+import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/views/storm_record_view.dart';
@@ -14,7 +14,8 @@ class StormTile extends StatefulWidget {
   final VoidCallback onStopStorm;
 
   // constructor
-  StormTile({@required this.storm, this.onDismiss, this.onSave, this.onStopStorm});
+  StormTile(
+      {@required this.storm, this.onDismiss, this.onSave, this.onStopStorm});
 
   @override
   StormTileState createState() {
@@ -70,7 +71,22 @@ class StormTileState extends State<StormTile> {
               _buildNoteText(storm.notes),
             ],
           ),
-          trailing: widget.onStopStorm == null ? null : Text('stop'),
+          trailing: (widget.onStopStorm != null && storm.endDatetime == null)
+              ? RaisedButton(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Icon(Icons.stop, color: Colors.red,),
+                      Text('Stop'),
+                    ],
+                  ),
+                  onPressed: () {
+                    StormsData _stormsData = new Injector().stormsData;
+                    storm.endDatetime = DateTime.now();
+                    _stormsData.saveStormRecord(storm.id, storm).then((stormId) => widget.onSave());
+                  },
+                )
+              : null,
         ));
   }
 
