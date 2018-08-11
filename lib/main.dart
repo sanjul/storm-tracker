@@ -13,7 +13,7 @@ void main() {
   runApp(new MaterialApp(
     home: new LandingView(),
     theme: new ThemeData(
-      primarySwatch: Colors.lightBlue,
+      primarySwatch: Colors.purple,
       brightness: Brightness.light,
       // primaryColor: Colors.blueGrey,
       // accentColor: Colors.blue,

@@ -72,7 +72,7 @@ class StormTileState extends State<StormTile> {
             ],
           ),
           trailing: (widget.onStopStorm != null && storm.endDatetime == null)
-              ? RaisedButton(
+              ? InkWell(
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
@@ -80,10 +80,12 @@ class StormTileState extends State<StormTile> {
                       Text('Stop'),
                     ],
                   ),
-                  onPressed: () {
+                  onTap: () {
                     StormsData _stormsData = new Injector().stormsData;
                     storm.endDatetime = DateTime.now();
-                    _stormsData.saveStormRecord(storm.id, storm).then((stormId) => widget.onSave());
+                    _stormsData.saveStormRecord(storm.id, storm)
+                      .then((stormId) => widget.onSave())
+                      .then((stormId) => widget.onStopStorm());
                   },
                 )
               : null,
@@ -115,7 +117,7 @@ class StormTileState extends State<StormTile> {
       month = "";
       spaceHeight = 0.0;
     } else {
-      bubbleColor = Colors.primaries[color];
+      bubbleColor = Colors.blue;// Colors.primaries[color];
       bubbleChild = Text(
         dateUtil.getDay(date),
         style: TextStyle(fontWeight: FontWeight.bold),

@@ -4,7 +4,7 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
 
 abstract class HomeViewContract {
-  void onLoadComplete(Home home);
+  void onLoadComplete(HomeData home);
   void onError(dynamic error);
 }
 
@@ -20,7 +20,7 @@ class HomePresenter {
   Future loadHome() async {
      _stormsData
         .fetchStormsList()
-        .then((list) => _view.onLoadComplete(Home.prepare(list)))
+        .then((list) => _view.onLoadComplete(HomeData.prepare(list)))
         .catchError((error) => _view.onError(error));
   }
 }

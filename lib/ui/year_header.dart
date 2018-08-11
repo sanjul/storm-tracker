@@ -3,16 +3,11 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/util/DateUtil.dart';
 
 class YearHeader extends StatefulWidget {
-  String _year;
+  final String _year;
   String get year => _year;
-  YearHeader(Storm storm) {
-    DateTime date;
-    if (storm != null) {
-      date = storm.startDatetime ?? storm.endDatetime;
-    }
-    _year = dateUtil.getYear(date);
-  }
-
+  YearHeader(Storm storm):
+    _year = dateUtil.getYear(storm.startDatetime ?? storm.endDatetime);
+  
   @override
   YearHeaderState createState() {
     return new YearHeaderState();

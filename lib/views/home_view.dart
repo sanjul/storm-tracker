@@ -4,16 +4,21 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/modules/home_presenter.dart';
 import 'package:stormtr/ui/storm_tile.dart';
-import 'package:stormtr/util/AppUtil.dart';
-import 'package:stormtr/views/storm_record_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> implements HomeViewContract {
-  Home _home;
+class _HomeViewState extends State<HomeView>
+    with SingleTickerProviderStateMixin
+    implements HomeViewContract {
+  Animation<double> _bgFadeAnimation;
+  AnimationController _bgFadeAnimController;
+
+  final _opacityTween = new Tween<double>(begin: 0.0, end: 0.8);
+
+  HomeData _homeData;
 
   HomePresenter _presenter;
   _HomeViewState() {
@@ -21,9 +26,21 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _bgFadeAnimController.dispose();
+  }
+
+  @override
   void initState() {
-    _presenter.loadHome();
     super.initState();
+    _bgFadeAnimController = new AnimationController(
+        vsync: this, duration: new Duration(milliseconds: 600));
+    _bgFadeAnimation = new CurvedAnimation(
+        parent: _bgFadeAnimController, curve: Curves.easeIn);
+    _bgFadeAnimController.addListener(() => this.setState(() {}));
+    _presenter.loadHome();
+    _animateImage();
   }
 
   @override
@@ -32,43 +49,77 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   }
 
   @override
-  void onLoadComplete(Home home) {
-    _home = home;
+  void onLoadComplete(HomeData home) {
+    _homeData = home;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return _home != null ? _buildBody() : CircularProgressIndicator();
-  }
-
-  Widget _buildBody() {
-    if (_home.isEmpty) {
-      return welcomeNote();
-    }
-
-    if (true)
+    if (_homeData != null) {
       return Scaffold(
         floatingActionButton: floatingButton(),
-        body: homeBody(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        body: _homeData.isNotEmpty ? homeBody() : welcomeNote(),
       );
+    } else {
+      return showProgress();
+    }
   }
 
   Widget homeBody() {
-    return ListView(
-      children: <Widget>[
-        showLastStorm(),
-        DrawerHeader(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Average duration : ${_home.averageDuration} days"),
-              SizedBox(height: 8.0),
-              Text("Average gap : ${_home.averageGap} days"),
-            ],
+    List<Widget> _items = List<Widget>();
+    _items.add(showLastStorm());
+
+    if (_homeData.stats.isNotEmpty)
+      _items.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(children: [
+          Icon(
+            Icons.wb_incandescent,
+            color: Theme.of(context).accentColor,
           ),
-        )
-      ],
+          SizedBox(
+            width: 10.0,
+          ),
+          Text(
+            "Insights",
+            textScaleFactor: 1.5,
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
+            ),
+          ),
+        ]),
+      ));
+
+    _homeData.stats.forEach((stat) {
+      _items.add(
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(stat),
+          ),
+        ),
+      );
+    });
+
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: _getMoodImage(),
+            fit: BoxFit.contain,
+            alignment: AlignmentDirectional.centerEnd,
+            colorFilter: new ColorFilter.mode(
+              Theme
+                  .of(context)
+                  .canvasColor
+                  .withOpacity(_opacityTween.evaluate(_bgFadeAnimation)),
+              BlendMode.dstATop,
+            )),
+      ),
+      child: ListView(
+        children: _items,
+      ),
     );
   }
 
@@ -78,14 +129,23 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Icon(Icons.flag),
-            new Text("Let's start fresh!", textScaleFactor: 2.5),
-            CircleAvatar(
-              child: IconButton(
-                icon: Icon(Icons.play_arrow),
-                onPressed: () {},
-              ),
-            )
+            new Icon(
+              Icons.filter_vintage,
+              color: Colors.purpleAccent,
+              size: 80.0,
+            ),
+            new Text("Welcome!", textScaleFactor: 2.5),
+            new Text(
+              "Track your personal storms",
+              style: TextStyle(color: Colors.purple),
+            ),
+            SizedBox(
+              height: 30.0,
+            ),
+            new Text(
+              "Tap record button when the storm starts",
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
           ],
         ),
       ),
@@ -94,16 +154,10 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
 
   Widget showLastStorm() {
     Widget _caption;
-    if (_home.lastStorm.endDateDB == null) {
-      _caption = Row(children: [
-        Icon(Icons.refresh),
-        Text("Storm currently in progress"),
-      ]);
+    if (_homeData.lastStorm.endDateDB == null) {
+      _caption = _stormCaption(Icons.update, "Storm currently in progress");
     } else {
-      _caption = Row(children: [
-        Icon(Icons.event_available),
-        Text("Completed storm"),
-      ]);
+      _caption = _stormCaption(Icons.event_available, "Completed storm");
     }
 
     return DrawerHeader(
@@ -113,17 +167,27 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
           _caption,
           SizedBox(height: 8.0),
           StormTile(
-            storm: _home.lastStorm,
+            storm: _homeData.lastStorm,
             onSave: () => _presenter.loadHome(),
-            onStopStorm: () => print("Hell no"),
+            onStopStorm: () {
+              _animateImage();
+            },
           ),
         ],
       ),
     );
   }
 
+  void _animateImage() {
+    setState(() {
+      _bgFadeAnimController.reset();
+      _bgFadeAnimController.forward();
+    });
+  }
+
   Widget floatingButton() {
-    if (_home.lastStorm.endDatetime == null) {
+    if (_homeData.lastStorm != null &&
+        _homeData.lastStorm.endDatetime == null) {
       return null;
     }
 
@@ -134,10 +198,57 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
         StormsData _stormsData = new Injector().stormsData;
         _stormsData
             .saveStormRecord(null, storm)
-            .then((stormId) => _presenter.loadHome());
+            .then((stormId) => _presenter.loadHome())
+            .then((stormId) => _animateImage());
       },
       tooltip: 'Start recording storm',
-      child: new Icon(Icons.play_arrow),
+      child: new Icon(Icons.fiber_manual_record, color: Colors.red),
+      backgroundColor: Colors.white,
     );
   }
+
+  Widget showProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _stormCaption(IconData icon, String caption) {
+    return Row(children: [
+      Icon(
+        icon,
+        color: Theme.of(context).accentColor,
+        size: 30.0,
+      ),
+      SizedBox(
+        width: 10.0,
+      ),
+      Text(
+        caption,
+        textScaleFactor: 1.5,
+        style: TextStyle(
+          color: Theme.of(context).accentColor,
+        ),
+      ),
+    ]);
+  }
+
+  AssetImage _getMoodImage() {
+    if (_homeData.isStormInProgress) {
+      return AssetImage("assets/graphics/stormy_day_1.png");
+    } else {
+      return AssetImage("assets/graphics/sunny_day_1.png");
+    }
+  }
+
+  // Widget _glowingContainer({Widget child}) {
+  //   return Container(
+  //     child: child,
+  //     decoration: BoxDecoration(
+  //       boxShadow: [
+  //         BoxShadow(color: Colors.black, blurRadius: 30.0, spreadRadius: 10.0),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
