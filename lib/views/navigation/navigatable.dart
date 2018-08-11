@@ -6,10 +6,12 @@ class Navigatable {
   IconData icon;
   String title;
   ViewBuilder builder;
-
+  List<Navigatable> views;
   // Constructor
   Navigatable({
     @required this.title,
-    @required this.builder, 
-    this.icon});
+    this.builder, 
+    this.icon,
+    this.views
+    });
 }
