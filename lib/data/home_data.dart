@@ -50,7 +50,7 @@ class HomeData {
     if (_avgDuration > 0) _stats.add("On average, a storm lasts for about $_avgDuration days");
     if (_gapCount > 0) _stats.add("On average, there is about $_avgGap days between storms");
 
-    if(isNoStormInProgress){
+    if(isNoStormInProgress && stormsList.length > 1){
       _predictedNextStormDate = _lastStorm.endDatetime.add(Duration(days: _avgGap));
       String dispDate = dateUtil.formatDate(_predictedNextStormDate);
       int numDays= _predictedNextStormDate.difference(DateTime.now()).inDays;

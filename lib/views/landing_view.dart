@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stormtr/views/config/Config.dart';
 import 'package:stormtr/views/navigation/app_navigator_view.dart';
 import '../util/AppUtil.dart';
 import '../ui/logo.dart';
@@ -29,7 +30,10 @@ class LandingViewState extends State<LandingView>
 
     _logoAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        appUtil.gotoPage(context, new AppNavigatorView());
+        appUtil.gotoPage(
+          context,
+          new AppNavigatorView(Config.navigatables),
+        );
       }
     });
   }

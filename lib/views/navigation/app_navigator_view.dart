@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:stormtr/views/navigation/appdrawer_view.dart';
 import 'package:stormtr/views/navigation/navigatable.dart';
 
-import 'package:stormtr/views/home_view.dart';
-import 'package:stormtr/views/charts_view.dart';
-import 'package:stormtr/views/timeline_view.dart';
-
 class AppNavigatorView extends StatefulWidget {
+  final List<Navigatable> _navigatables;
+
   @override
   AppNavigatorViewState createState() => AppNavigatorViewState();
+
+  AppNavigatorView(this._navigatables);
 }
 
 class AppNavigatorViewState extends State<AppNavigatorView> {
@@ -22,27 +22,7 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
   @override
   void initState() {
     /* List of views that can be loaded in home view */
-    _views = [
-      Navigatable(icon: Icons.home, title: "Home",
-          // builder: () =>  HomeView(),
-          views: [
-            Navigatable(
-              title: "Home",
-              icon: Icons.home,
-              builder: () => HomeView(),
-            ),
-            Navigatable(
-              title: "Time Line",
-              icon: Icons.timeline,
-              builder: () => TimelineView(),
-            )
-          ]),
-      Navigatable(
-        icon: Icons.pie_chart,
-        title: "Charts",
-        builder: () => ChartsView(),
-      ),
-    ];
+    _views = widget._navigatables;
 
     /* Set Home view as the default view */
     _currentView = _views[0];
@@ -62,10 +42,10 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
     );
 
     if (_currentView.builder == null &&
-        _currentView.views != null &&
-        _currentView.views.isNotEmpty) {
+        _currentView.tabs != null &&
+        _currentView.tabs.isNotEmpty) {
       content = DefaultTabController(
-        length: _currentView.views.length,
+        length: _currentView.tabs.length,
         child: content,
       );
     }
@@ -82,9 +62,9 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
   Widget _buildBody() {
     if (_currentView.builder != null) {
       return _currentView.builder();
-    } else if (_currentView.views != null && _currentView.views.isNotEmpty) {
+    } else if (_currentView.tabs != null && _currentView.tabs.isNotEmpty) {
       return TabBarView(
-        children: _currentView.views
+        children: _currentView.tabs
             .map(
               (nav) => nav.builder(),
             )
@@ -96,11 +76,11 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
   }
 
   Widget _buildTabs() {
-    if (_currentView.views != null && _currentView.builder == null) {
+    if (_currentView.tabs != null && _currentView.builder == null) {
       List<Tab> _tabs = new List<Tab>();
-      _currentView.views.forEach((nav) {
+      _currentView.tabs.forEach((nav) {
         _tabs.add(Tab(
-          icon: Icon(nav.icon),
+          icon: nav.icon != null ? Icon(nav.icon) : null,
           text: nav.title,
         ));
       });

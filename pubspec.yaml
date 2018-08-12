@@ -1,5 +1,5 @@
 name: stormtr
-description: A new Flutter project.
+description: Track your personal storms.
 
 dependencies:
   flutter:
@@ -12,6 +12,7 @@ dependencies:
   side_header_list_view: ^0.0.3
   sqflite: any
   path_provider: ^0.4.0
+  charts_flutter: ^0.4.0
   
 
 dev_dependencies:

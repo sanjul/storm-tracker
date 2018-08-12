@@ -202,8 +202,9 @@ class _HomeViewState extends State<HomeView>
             .then((stormId) => _animateImage());
       },
       tooltip: 'Start recording storm',
-      child: new Icon(Icons.fiber_manual_record, color: Colors.red),
-      backgroundColor: Colors.white,
+      child: new Icon(Icons.fiber_manual_record),
+      backgroundColor: Colors.red,
+      foregroundColor: Colors.white,
     );
   }
 
