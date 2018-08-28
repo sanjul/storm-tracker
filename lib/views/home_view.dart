@@ -94,10 +94,13 @@ class _HomeViewState extends State<HomeView>
 
     _homeData.stats.forEach((stat) {
       _items.add(
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(stat),
+        Opacity(
+          opacity: 0.8,
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(stat),
+            ),
           ),
         ),
       );

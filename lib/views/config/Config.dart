@@ -18,12 +18,12 @@ class Config {
           ),
           Navigatable(
             // title: "Time Line",
-            icon: Icons.timeline,
+            icon: Icons.view_list,
             builder: () => TimelineView(),
           )
         ]),
         Navigatable(
-          icon: Icons.multiline_chart,
+          icon: Icons.timeline,
           title: "Charts",
           tabs: [
             Navigatable(
