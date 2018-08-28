@@ -18,7 +18,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "0.6.0"
 
+flutter_icons:
+  android: true 
+  image_path: "assets/icons/appIcon.png"
+  #ios: true
+  # image_path_android: "assets/icons/appIcon.png"
+  # image_path_ios: "assets/icons/appIcon.png"
+  # adaptive_icon_background: "#FFFAFAFA"
+  # adaptive_icon_foreground: "assets/icons/appIcon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -65,3 +74,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+  fonts:
+    - family: Carolingia
+      fonts:
+        - asset: assets/fonts/Carolingia.ttf
+    - family: QuarmicSans
+      fonts:
+        - asset: assets/fonts/QuarmicSans.ttf

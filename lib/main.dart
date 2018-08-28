@@ -15,6 +15,7 @@ void main() {
     theme: new ThemeData(
       primarySwatch: Colors.purple,
       brightness: Brightness.light,
+      fontFamily: "QuarmicSans"
       // primaryColor: Colors.blueGrey,
       // accentColor: Colors.blue,
     ),

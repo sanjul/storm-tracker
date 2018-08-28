@@ -13,6 +13,7 @@ class Logo extends StatelessWidget {
         new Text(
           "Storm",
           style: new TextStyle(
+              fontFamily: "Carolingia",
               fontSize: this._size,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -22,6 +23,7 @@ class Logo extends StatelessWidget {
         new Text(
           "Tracker",
           style: new TextStyle(
+              fontFamily: "Carolingia",
               fontSize: this._size,
               fontWeight: FontWeight.bold,
               color: Colors.redAccent,
