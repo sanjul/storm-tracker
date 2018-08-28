@@ -55,7 +55,7 @@ class LandingViewState extends State<LandingView>
             offset: new Offset(0.0, _logoAnimation.value * -10),
             child: new Opacity(
               opacity: _opacityTween.evaluate(_logoAnimation),
-              child: new Logo(50.0, MainAxisAlignment.center),
+              child: new Logo(35.0, MainAxisAlignment.center),
             ),
           )
         ],
