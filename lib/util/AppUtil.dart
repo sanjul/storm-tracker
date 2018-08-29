@@ -30,10 +30,11 @@ class AppUtil {
   void showSnackBar(ScaffoldState state, String message,
       [String actionLabel, VoidCallback actionCallBack]) {
     List<Widget> _children = <Widget>[
-      new Icon(Icons.info),
-      new Text(
+      Icon(Icons.info),
+      SizedBox(width: 10.0),
+      Text(
         message,
-        textScaleFactor: 1.3,
+        // textScaleFactor: 1.3,
       ),
     ];
 
@@ -56,11 +57,10 @@ class AppUtil {
       new SnackBar(
         action: _action,
         duration: Duration(seconds: _delay),
-        content: new Card(
+        content: new Container(
             child: new Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(2.0),
           child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: _children,
           ),
         )),

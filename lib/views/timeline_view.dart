@@ -7,6 +7,7 @@ import 'package:stormtr/ui/storm_tile.dart';
 import 'package:stormtr/ui/year_header.dart';
 import 'package:stormtr/views/storm_record_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
+import 'package:stormtr/util/DateUtil.dart';
 
 class TimelineView extends StatefulWidget {
   @override
@@ -122,8 +123,9 @@ class TimelineViewState extends State<TimelineView>
 
   @override
   void onStormDeleteComplete(bool isDeleted, Storm storm) {
+    String dispDate = dateUtil.formatDate(storm.startDatetime);
     appUtil.showSnackBar(
-        _scaffoldKey.currentState, "Storm record deleted!", "Undo", () {
+        _scaffoldKey.currentState, "Storm record of $dispDate deleted!", "Undo", () {
       _presenter
           .undoStormDelete(storm)
           .then((a) => _presenter.loadStormsList());
@@ -132,7 +134,8 @@ class TimelineViewState extends State<TimelineView>
 
   @override
   void onStormDeleteUndoComplete(Storm storm, int newStormId) {
-    appUtil.showSnackBar(_scaffoldKey.currentState, "Storm record restored!");
+    String dispDate = dateUtil.formatDate(storm.startDatetime);
+    appUtil.showSnackBar(_scaffoldKey.currentState, "Storm record of $dispDate restored!");
     setState(() {});
   }
 }
