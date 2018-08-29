@@ -16,8 +16,6 @@ class HomeData {
   List<String> _stats = new List();
   List<String> get stats => _stats;
 
-  // int get averageDuration => _avgDuration;
-  // int get averageGap => _avgGap;
   Storm get lastStorm => _lastStorm;
   bool get isEmpty => _stormsList.isEmpty;
   bool get isNotEmpty => !isEmpty;
@@ -47,30 +45,37 @@ class HomeData {
     if (_totalDays > 0) _avgDuration = (_totalDays / _diffCount).round();
     if (_gapCount > 0) _avgGap = (_totalGap / _gapCount).round();
 
-    if (_avgDuration > 0) _stats.add("On average, a storm lasts for about $_avgDuration days");
-    if (_gapCount > 0) _stats.add("On average, there is about $_avgGap days between storms");
+    /* Following code generates insights */
+    String stat = "";
+    if (_avgDuration > 0) stat = "On average, a storm lasts for about $_avgDuration days";
+    if (_gapCount > 0){
+      if(stat == "")
+       stat = "On average, there is about $_avgGap days between storms"; 
+      else 
+        stat += " with about $_avgGap days between storms";
+    } 
+    
+    if (stat != "") _stats.add(stat);
 
     if(isNoStormInProgress && stormsList.length > 1){
       _predictedNextStormDate = _lastStorm.endDatetime.add(Duration(days: _avgGap));
       String dispDate = dateUtil.formatDate(_predictedNextStormDate);
       int numDays= _predictedNextStormDate.difference(DateTime.now()).inDays;
       String addlInfo;
+
       if(numDays == -1){
-        addlInfo = "That was supposed to be yesterday. Let's give it a day or two...";
+        addlInfo = "should have started yesterday. \nIf not, don't worry, Let's give it a day or two...";
       } else if(numDays < -1){
-        addlInfo = "That was supposed to be ${numDays.abs()} days ago...";
+        addlInfo = "should have started on $dispDate,\n which was about ${numDays.abs()} days ago... \nTake care...";
       } else if(numDays == 0){
-        addlInfo = "That's today! Get your storm defences handy!";
+        addlInfo = "might be starting TODAY!! Get storm-defences ready!";
       } else if(numDays == 1){
-        addlInfo = "That's tomorrow. Be prepared, keep your storm defences handy!";
+        addlInfo = "likely be starting tomorrow. Be prepared, keep storm-defences handy!";
       } else if(numDays > 1){
-        addlInfo = "That's $numDays days to go!";
+        addlInfo = "likely be starting on $dispDate. That's $numDays days to go!";
       }
 
-      if (addlInfo != null){
-        addlInfo = "\n$addlInfo";
-      }
-      _stats.add("Ideally, next storm should start on $dispDate. $addlInfo");
+      _stats.add("It seems, next storm $addlInfo");
     }
   }
 }
