@@ -158,9 +158,9 @@ class _HomeViewState extends State<HomeView>
   Widget showLastStorm() {
     Widget _caption;
     if (_homeData.lastStorm.endDateDB == null) {
-      _caption = _stormCaption(Icons.update, "Storm currently in progress");
+      _caption = _stormCaption(Icons.update, "In progress:");
     } else {
-      _caption = _stormCaption(Icons.event_available, "Completed storm");
+      _caption = _stormCaption(Icons.event_available, "Completed:");
     }
 
     return DrawerHeader(

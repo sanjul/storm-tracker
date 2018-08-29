@@ -125,7 +125,7 @@ class TimelineViewState extends State<TimelineView>
   void onStormDeleteComplete(bool isDeleted, Storm storm) {
     String dispDate = dateUtil.formatDate(storm.startDatetime);
     appUtil.showSnackBar(
-        _scaffoldKey.currentState, "Storm record of $dispDate deleted!", "Undo", () {
+        _scaffoldKey.currentState, "Record of $dispDate deleted!", "Undo", () {
       _presenter
           .undoStormDelete(storm)
           .then((a) => _presenter.loadStormsList());
@@ -135,7 +135,7 @@ class TimelineViewState extends State<TimelineView>
   @override
   void onStormDeleteUndoComplete(Storm storm, int newStormId) {
     String dispDate = dateUtil.formatDate(storm.startDatetime);
-    appUtil.showSnackBar(_scaffoldKey.currentState, "Storm record of $dispDate restored!");
+    appUtil.showSnackBar(_scaffoldKey.currentState, "Record of $dispDate restored!");
     setState(() {});
   }
 }

@@ -98,7 +98,8 @@ class StormRecordViewState extends State<StormRecordView>
     return new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: new Text("Storm Details"),
+        title: new Text(
+            widget._stormId != null && widget._stormId > 0 ? "Edit" : "Add"),
         actions: <Widget>[_saveButton],
       ),
       body: _storm == null

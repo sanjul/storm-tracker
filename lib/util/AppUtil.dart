@@ -57,10 +57,11 @@ class AppUtil {
       new SnackBar(
         action: _action,
         duration: Duration(seconds: _delay),
-        content: new Container(
-            child: new Padding(
+        content: Container(
+            child: Padding(
           padding: EdgeInsets.all(2.0),
-          child: new Row(
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: _children,
           ),
         )),
