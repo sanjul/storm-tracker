@@ -8,29 +8,35 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
-      children: <Widget>[
-        new Text(
-          "Storm",
-          style: new TextStyle(
-              fontFamily: "Carolingia",
-              fontSize: this._size,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: _size/7,
-          ),
+    return Column(
+      children: [
+         Image(image:AssetImage("assets/icons/appIcon.png"), 
+         fit: BoxFit.contain,
+         width: this._size*3.5,),
+         Row(
+          children: <Widget>[
+             Text(
+              "Storm",
+              style: TextStyle(
+                fontSize: this._size,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                letterSpacing: _size / 7,
+              ),
+            ),
+            Text(
+              "TR",
+              style:  TextStyle(
+                //fontFamily: "Carolingia",
+                fontSize: this._size/1.5,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent
+              ),
+            )
+          ],
+          mainAxisAlignment: this._align,
         ),
-        new Text(
-          "Tracker",
-          style: new TextStyle(
-              fontFamily: "Carolingia",
-              fontSize: this._size,
-              fontWeight: FontWeight.bold,
-              color: Colors.redAccent,
-          ),
-        )
       ],
-      mainAxisAlignment: this._align,
     );
   }
 }

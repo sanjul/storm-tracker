@@ -52,10 +52,10 @@ class LandingViewState extends State<LandingView>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Transform.translate(
-            offset: new Offset(0.0, _logoAnimation.value * -10),
+            offset: new Offset(0.0, _logoAnimation.value * -20),
             child: new Opacity(
               opacity: _opacityTween.evaluate(_logoAnimation),
-              child: new Logo(35.0, MainAxisAlignment.center),
+              child: new Logo(20.0, MainAxisAlignment.center),
             ),
           )
         ],
