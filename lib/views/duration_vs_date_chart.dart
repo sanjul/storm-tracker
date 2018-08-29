@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stormtr/data/graph_data.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:stormtr/modules/graph_presenter.dart';
+import 'package:stormtr/ui/WelcomeNote.dart';
 
 class DurationVsDateChart extends StatefulWidget {
   @override
@@ -37,6 +38,10 @@ class DurationVsDateChartState extends State<DurationVsDateChart>
       return new Center(
         child: CircularProgressIndicator(),
       );
+    }
+
+    if(_chartData.isEmpty){
+      return WelcomeNote("Not enough records available to show this chart. \nCome back here later!");
     }
 
     var _series = [

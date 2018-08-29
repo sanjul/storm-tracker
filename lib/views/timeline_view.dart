@@ -69,18 +69,7 @@ class TimelineViewState extends State<TimelineView>
     }
 
     if (_stormsList.isEmpty) {
-      return Center(
-        child: Material(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Icon(Icons.flag),
-              new Text("Let's start fresh!", textScaleFactor: 2.5),
-              new Text("Tap on the + icon to add a new record"),
-            ],
-          ),
-        ),
-      );
+      return welcomeNote();
     }
 
     return new SideHeaderListView(
@@ -93,7 +82,7 @@ class TimelineViewState extends State<TimelineView>
         return new Card(
           child: StormTile(
             storm: _stormsList[index],
-            onDismiss: () => onStormDismissCallBack(_stormsList[index]), 
+            onDismiss: () => onStormDismissCallBack(_stormsList[index]),
             onSave: () => _presenter.loadStormsList(),
           ),
         );
@@ -135,7 +124,33 @@ class TimelineViewState extends State<TimelineView>
   @override
   void onStormDeleteUndoComplete(Storm storm, int newStormId) {
     String dispDate = dateUtil.formatDate(storm.startDatetime);
-    appUtil.showSnackBar(_scaffoldKey.currentState, "Record of $dispDate restored!");
+    appUtil.showSnackBar(
+        _scaffoldKey.currentState, "Record of $dispDate restored!");
     setState(() {});
+  }
+
+  Widget welcomeNote() {
+    return Center(
+      child: Material(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Icon(
+              Icons.filter_vintage,
+              color: Colors.purpleAccent,
+              size: 80.0,
+            ),
+            new Text("Welcome!", textScaleFactor: 2.5),
+            SizedBox(
+              height: 30.0,
+            ),
+            new Text(
+              "Tap the + button to add a new record",
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

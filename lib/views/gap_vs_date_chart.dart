@@ -3,6 +3,7 @@ import 'package:stormtr/data/graph_data.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/modules/graph_presenter.dart';
+import 'package:stormtr/ui/WelcomeNote.dart';
 
 class GapVsDateChart extends StatefulWidget {
   @override
@@ -38,6 +39,10 @@ class GapVsDateChartState extends State<GapVsDateChart>
       return new Center(
         child: CircularProgressIndicator(),
       );
+    }
+
+    if(_chartData.isEmpty){
+      return WelcomeNote("Not enough records available to show this chart. \nCome back here later!");
     }
 
     var _series = [

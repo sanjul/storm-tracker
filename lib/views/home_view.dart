@@ -3,6 +3,7 @@ import 'package:stormtr/data/home_data.dart';
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/modules/home_presenter.dart';
+import 'package:stormtr/ui/WelcomeNote.dart';
 import 'package:stormtr/ui/storm_tile.dart';
 
 class HomeView extends StatefulWidget {
@@ -60,7 +61,9 @@ class _HomeViewState extends State<HomeView>
       return Scaffold(
         floatingActionButton: floatingButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        body: _homeData.isNotEmpty ? homeBody() : welcomeNote(),
+        body: _homeData.isNotEmpty
+            ? homeBody()
+            : WelcomeNote("Tap the record button when a storm begins"),
       );
     } else {
       return showProgress();
@@ -122,35 +125,6 @@ class _HomeViewState extends State<HomeView>
       ),
       child: ListView(
         children: _items,
-      ),
-    );
-  }
-
-  Widget welcomeNote() {
-    return Center(
-      child: Material(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Icon(
-              Icons.filter_vintage,
-              color: Colors.purpleAccent,
-              size: 80.0,
-            ),
-            new Text("Welcome!", textScaleFactor: 2.5),
-            new Text(
-              "Track your personal storms",
-              style: TextStyle(color: Colors.purple),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            new Text(
-              "Tap record button when the storm starts",
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
       ),
     );
   }
