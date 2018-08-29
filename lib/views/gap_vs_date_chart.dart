@@ -62,8 +62,7 @@ class GapVsDateChartState extends State<GapVsDateChart>
 
     return new Padding(
       padding: new EdgeInsets.all(32.0),
-      child: new SizedBox(
-        height: 200.0,
+      child: new Container(
         child: chart,
       ),
     );
