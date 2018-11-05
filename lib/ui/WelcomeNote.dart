@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WelcomeNote extends StatelessWidget {
-  String _instruction;
+  final String _instruction;
 
   WelcomeNote(this._instruction);
 
