@@ -12,10 +12,11 @@ class StormTile extends StatefulWidget {
   final VoidCallback onDismiss;
   final VoidCallback onSave;
   final VoidCallback onStopStorm;
+  final bool isRaised;
 
   // constructor
   StormTile(
-      {@required this.storm, this.onDismiss, this.onSave, this.onStopStorm});
+      {@required this.storm, this.onDismiss, this.onSave, this.onStopStorm, this.isRaised = true});
 
   @override
   StormTileState createState() {
@@ -41,7 +42,7 @@ class StormTileState extends State<StormTile> {
         }
       },
       child: widget.onDismiss == null
-          ? _buildListTile(widget.storm)
+          ? _buildListTile(widget.storm, widget.isRaised)
           : new Dismissible(
               key: new Key(stormId.toString()),
               background: new Material(
@@ -52,14 +53,14 @@ class StormTileState extends State<StormTile> {
                 ),
               ),
               onDismissed: (dir) => widget.onDismiss(),
-              child: _buildListTile(widget.storm),
+              child: _buildListTile(widget.storm, widget.isRaised),
             ),
     );
   }
 
-  Widget _buildListTile(Storm storm) {
+  Widget _buildListTile(Storm storm, [bool isRaised = true]) {
     return Material(
-        elevation: 4.0,
+        elevation: isRaised ? 4.0: 0.0,
         child: ListTile(
           title: new Wrap(
             children: [

@@ -149,6 +149,7 @@ class _HomeViewState extends State<HomeView>
             onStopStorm: () {
               _animateImage();
             },
+            isRaised: false,
           ),
         ],
       ),

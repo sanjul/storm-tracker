@@ -161,11 +161,9 @@ class StormRecordViewState extends State<StormRecordView>
     return <Widget>[
       new Row(
         children: <Widget>[
-          new Icon(Icons.calendar_today),
-          new Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: new Text(label),
-          ),
+          Icon(Icons.calendar_today),
+          Text(label),
+          
         ],
       ),
       new InkWell(
