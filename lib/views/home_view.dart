@@ -5,21 +5,17 @@ import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/modules/home_presenter.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
 import 'package:stormtr/ui/storm_tile.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView>
-    with SingleTickerProviderStateMixin
-    implements HomeViewContract {
-  Animation<double> _bgFadeAnimation;
-  AnimationController _bgFadeAnimController;
-
-  final _opacityTween = new Tween<double>(begin: 0.0, end: 0.8);
-
+class _HomeViewState extends State<HomeView> implements HomeViewContract {
   HomeData _homeData;
+  String _moodAnimation = "sunnyday";
+  FlareController animController;
 
   HomePresenter _presenter;
   _HomeViewState() {
@@ -29,19 +25,12 @@ class _HomeViewState extends State<HomeView>
   @override
   void dispose() {
     super.dispose();
-    _bgFadeAnimController.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _bgFadeAnimController = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 600));
-    _bgFadeAnimation = new CurvedAnimation(
-        parent: _bgFadeAnimController, curve: Curves.easeIn);
-    _bgFadeAnimController.addListener(() => this.setState(() {}));
     _presenter.loadHome();
-    _animateImage();
   }
 
   @override
@@ -52,6 +41,7 @@ class _HomeViewState extends State<HomeView>
   @override
   void onLoadComplete(HomeData home) {
     _homeData = home;
+    _updateAnimation();
     setState(() {});
   }
 
@@ -99,7 +89,7 @@ class _HomeViewState extends State<HomeView>
       _items.add(
         Opacity(
           opacity: 0.8,
-          child: Card(
+          child: Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(stat),
@@ -110,21 +100,13 @@ class _HomeViewState extends State<HomeView>
     });
 
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: _getMoodImage(),
-            fit: BoxFit.contain,
-            alignment: AlignmentDirectional.centerEnd,
-            colorFilter: new ColorFilter.mode(
-              Theme
-                  .of(context)
-                  .canvasColor
-                  .withOpacity(_opacityTween.evaluate(_bgFadeAnimation)),
-              BlendMode.dstATop,
-            )),
-      ),
-      child: ListView(
-        children: _items,
+      child: Stack(
+        children: [
+          _getMoodAnimation(),
+          ListView(
+            children: _items,
+          ),
+        ],
       ),
     );
   }
@@ -147,7 +129,7 @@ class _HomeViewState extends State<HomeView>
             storm: _homeData.lastStorm,
             onSave: () => _presenter.loadHome(),
             onStopStorm: () {
-              _animateImage();
+              _updateAnimation();
             },
             isRaised: false,
           ),
@@ -156,10 +138,40 @@ class _HomeViewState extends State<HomeView>
     );
   }
 
-  void _animateImage() {
+  Widget _getMoodAnimation() {
+    return Opacity(
+        opacity: 0.5,
+          child: FlareActor(
+        'assets/animations/sunandstorm.flr',
+        fit: BoxFit.contain,
+        alignment: Alignment.bottomCenter,
+        animation: _moodAnimation,
+        controller: animController,
+        callback: (a) {
+          if (a == "stormyday_ends") {
+            _moodAnimation = "sunnyday";
+          } else if (a == "sunnyday_ends") {
+            _moodAnimation = "stormyday";
+          }
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  void _updateAnimation() {
+    String animationName = "sunnyday";
+    if (_homeData != null) {
+      if (_homeData.isStormInProgress) {
+        animationName = "sunnyday_ends";
+      } else {
+        animationName = "stormyday_ends";
+      }
+    }
+
     setState(() {
-      _bgFadeAnimController.reset();
-      _bgFadeAnimController.forward();
+      _moodAnimation = animationName;
+      print("animation = $_moodAnimation");
     });
   }
 
@@ -177,7 +189,7 @@ class _HomeViewState extends State<HomeView>
         _stormsData
             .saveStormRecord(null, storm)
             .then((stormId) => _presenter.loadHome())
-            .then((stormId) => _animateImage());
+            .then((stormId) => _updateAnimation());
       },
       tooltip: 'Start recording storm',
       child: new Icon(Icons.fiber_manual_record),
@@ -210,14 +222,6 @@ class _HomeViewState extends State<HomeView>
         ),
       ),
     ]);
-  }
-
-  AssetImage _getMoodImage() {
-    if (_homeData.isStormInProgress) {
-      return AssetImage("assets/graphics/stormy_day_1.png");
-    } else {
-      return AssetImage("assets/graphics/sunny_day_1.png");
-    }
   }
 
   // Widget _glowingContainer({Widget child}) {

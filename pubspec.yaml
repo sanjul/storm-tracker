@@ -13,6 +13,7 @@ dependencies:
   sqflite: any
   path_provider: ^0.4.0
   charts_flutter: ^0.4.0
+  flare_flutter:
   
 
 dev_dependencies:
@@ -46,9 +47,8 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   assets:
-    - assets/graphics/sunny_day_1.png
-    - assets/graphics/stormy_day_1.png
     - assets/icons/appIcon.png
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
