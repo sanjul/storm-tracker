@@ -4,8 +4,8 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/modules/home_presenter.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
-import 'package:stormtr/ui/storm_tile.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:stormtr/ui/status_tile.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -100,6 +100,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
     });
 
     return Container(
+      padding: EdgeInsets.all(20),
       child: Stack(
         children: [
           _getMoodAnimation(),
@@ -119,22 +120,19 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
       _caption = _stormCaption(Icons.event_available, "Completed:");
     }
 
-    return DrawerHeader(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _caption,
-          SizedBox(height: 8.0),
-          StormTile(
-            storm: _homeData.lastStorm,
-            onSave: () => _presenter.loadHome(),
-            onStopStorm: () {
-              _updateAnimation();
-            },
-            isRaised: false,
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _caption,
+        SizedBox(height: 8.0),
+        StatusTile(
+          storm: _homeData.lastStorm,
+          onSave: () => _presenter.loadHome(),
+          onStopStorm: () {
+            _updateAnimation();
+          },
+        ),
+      ],
     );
   }
 
@@ -144,7 +142,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
           child: FlareActor(
         'assets/animations/sunandstorm.flr',
         fit: BoxFit.contain,
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         animation: _moodAnimation,
         controller: animController,
         callback: (a) {

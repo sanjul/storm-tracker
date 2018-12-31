@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/views/storm_record_view.dart';
@@ -11,12 +10,9 @@ class StormTile extends StatefulWidget {
   final Storm storm;
   final VoidCallback onDismiss;
   final VoidCallback onSave;
-  final VoidCallback onStopStorm;
-  final bool isRaised;
 
   // constructor
-  StormTile(
-      {@required this.storm, this.onDismiss, this.onSave, this.onStopStorm, this.isRaised = true});
+  StormTile({@required this.storm, this.onDismiss, this.onSave});
 
   @override
   StormTileState createState() {
@@ -41,56 +37,37 @@ class StormTileState extends State<StormTile> {
           widget.onSave();
         }
       },
-      child: widget.onDismiss == null
-          ? _buildListTile(widget.storm, widget.isRaised)
-          : new Dismissible(
-              key: new Key(stormId.toString()),
-              background: new Material(
-                color: Colors.red.shade300,
-                child: new Icon(
-                  Icons.delete_sweep,
-                  size: 40.0,
-                ),
-              ),
-              onDismissed: (dir) => widget.onDismiss(),
-              child: _buildListTile(widget.storm, widget.isRaised),
-            ),
+      child: Dismissible(
+        key: new Key(stormId.toString()),
+        background: new Material(
+          color: Colors.red.shade300,
+          child: new Icon(
+            Icons.delete_sweep,
+            size: 40.0,
+          ),
+        ),
+        onDismissed: (dir) => widget.onDismiss(),
+        child: _buildListTile(widget.storm),
+      ),
     );
   }
 
-  Widget _buildListTile(Storm storm, [bool isRaised = true]) {
-    return Material(
-        elevation: isRaised ? 4.0: 0.0,
-        child: ListTile(
-          title: new Wrap(
-            children: [
-              _buildDateRange(storm.startDatetime, storm.endDatetime),
-              new Column(children: [
-                _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
-                _buildLevelIconDisplay(Icons.cloud, storm.flux),
-              ]),
-              _buildNoteText(storm.notes),
-            ],
-          ),
-          trailing: (widget.onStopStorm != null && storm.endDatetime == null)
-              ? InkWell(
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Icon(Icons.stop, color: Colors.red,),
-                      Text('Stop'),
-                    ],
-                  ),
-                  onTap: () {
-                    StormsData _stormsData = new Injector().stormsData;
-                    storm.endDatetime = DateTime.now();
-                    _stormsData.saveStormRecord(storm.id, storm)
-                      .then((stormId) => widget.onSave())
-                      .then((stormId) => widget.onStopStorm());
-                  },
-                )
-              : null,
-        ));
+  Widget _buildListTile(Storm storm) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox.expand(
+        child: new Wrap(
+          children: [
+            _buildDateRange(storm.startDatetime, storm.endDatetime),
+            new Column(children: [
+              _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
+              _buildLevelIconDisplay(Icons.cloud, storm.flux),
+            ]),
+            _buildNoteText(storm.notes),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildDateRange(DateTime startDate, DateTime endDate) {
@@ -118,7 +95,7 @@ class StormTileState extends State<StormTile> {
       month = "";
       spaceHeight = 0.0;
     } else {
-      bubbleColor = Colors.blue;// Colors.primaries[color];
+      bubbleColor = Colors.blue; // Colors.primaries[color];
       bubbleChild = Text(
         dateUtil.getDay(date),
         style: TextStyle(fontWeight: FontWeight.bold),
