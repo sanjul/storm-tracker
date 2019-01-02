@@ -74,21 +74,26 @@ class TimelineViewState extends State<TimelineView>
 
     return Stack(
       children: [
-        new Positioned(
-          top: 0.0,
-          bottom: 0.0,
-          left: 14.0,
-          child: Opacity(
-            opacity: 0.5,
-            child: new Container(
-              height: double.infinity,
-              width: 4,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
+        _buildVerticalLine(),
         _buildTimeLine(),
       ],
+    );
+  }
+
+
+  Widget _buildVerticalLine() {
+    return Positioned(
+      top: 0.0,
+      bottom: 0.0,
+      left: 14.0,
+      child: Opacity(
+        opacity: 0.5,
+        child: new Container(
+          height: double.infinity,
+          width: 4,
+          color: Theme.of(context).accentColor,
+        ),
+      ),
     );
   }
 

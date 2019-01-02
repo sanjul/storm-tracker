@@ -7,7 +7,7 @@ void main() {
   
   Injector.configure(
     /* Make sure primaryDataSource is set to SQLLITE for production */
-    primaryDataSource: DataSource.MOCK,
+    primaryDataSource: DataSource.SQLLITE,
   );
 
   runApp(new MaterialApp(
