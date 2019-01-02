@@ -7,7 +7,7 @@ void main() {
   
   Injector.configure(
     /* Make sure primaryDataSource is set to SQLLITE for production */
-    primaryDataSource: DataSource.SQLLITE,
+    primaryDataSource: DataSource.MOCK,
   );
 
   runApp(new MaterialApp(
@@ -15,7 +15,7 @@ void main() {
     theme: new ThemeData(
       primarySwatch: Colors.purple,
       brightness: Brightness.light,
-      fontFamily: "QuarmicSans"
+      fontFamily: "QuarmicSans",
       // primaryColor: Colors.blueGrey,
       // accentColor: Colors.blue,
     ),

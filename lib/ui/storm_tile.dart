@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
+import 'package:stormtr/ui/date_range_bubbles.dart';
 import 'package:stormtr/util/AppUtil.dart';
-import 'package:stormtr/util/DateUtil.dart';
 import 'package:stormtr/views/storm_record_view.dart';
 
 class StormTile extends StatefulWidget {
@@ -27,99 +25,54 @@ class StormTileState extends State<StormTile> {
   Widget build(BuildContext context) {
     int stormId = widget.storm.id;
 
-    return new InkWell(
-      key: _tileKey,
-      onTap: () async {
-        Storm result =
-            await appUtil.gotoPage(context, new StormRecordView(stormId), true);
+    return SizedBox.expand(
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+        )),
+        child: InkWell(
+          key: _tileKey,
+          onTap: () async {
+            Storm result = await appUtil.gotoPage(
+                context, new StormRecordView(stormId), true);
 
-        if (result != null) {
-          widget.onSave();
-        }
-      },
-      child: Dismissible(
-        key: new Key(stormId.toString()),
-        background: new Material(
-          color: Colors.red.shade300,
-          child: new Icon(
-            Icons.delete_sweep,
-            size: 40.0,
+            if (result != null) {
+              widget.onSave();
+            }
+          },
+          child: Dismissible(
+            key: new Key(stormId.toString()),
+            background: Container(
+              color: Theme.of(context).backgroundColor,
+              child: new Icon(
+                Icons.delete_sweep,
+                size: 40.0,
+              ),
+            ),
+            onDismissed: (dir) => widget.onDismiss(),
+            child: _buildListTile(widget.storm),
           ),
         ),
-        onDismissed: (dir) => widget.onDismiss(),
-        child: _buildListTile(widget.storm),
       ),
     );
   }
 
   Widget _buildListTile(Storm storm) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox.expand(
-        child: new Wrap(
-          children: [
-            _buildDateRange(storm.startDatetime, storm.endDatetime),
-            new Column(children: [
-              _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
-              _buildLevelIconDisplay(Icons.cloud, storm.flux),
-            ]),
-            _buildNoteText(storm.notes),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateRange(DateTime startDate, DateTime endDate) {
-    int _random = new Random().nextInt(Colors.primaries.length);
-    return new Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        _buildDateBubble(startDate, _random),
-        new Icon(Icons.chevron_right),
-        _buildDateBubble(endDate, _random),
-      ],
-    );
-  }
-
-  Widget _buildDateBubble(DateTime date, int color) {
-    Color bubbleColor;
-    Widget bubbleChild;
-    String month;
-    double spaceHeight;
-
-    if (date == null) {
-      bubbleColor = Colors.grey.shade300;
-      bubbleChild = new Icon(Icons.help);
-      month = "";
-      spaceHeight = 0.0;
-    } else {
-      bubbleColor = Colors.blue; // Colors.primaries[color];
-      bubbleChild = Text(
-        dateUtil.getDay(date),
-        style: TextStyle(fontWeight: FontWeight.bold),
-      );
-      month = dateUtil.formatToMonth(date);
-      spaceHeight = 4.0;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CircleAvatar(
-            backgroundColor: bubbleColor,
-            radius: 20.0,
-            child: bubbleChild,
+      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 2),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          DateRangeBubbles(
+            startDate: storm.startDatetime,
+            endDate: storm.endDatetime,
           ),
-          SizedBox(
-            height: spaceHeight,
-          ),
-          Text(
-            month,
-          )
+          new Column(children: [
+            _buildLevelIconDisplay(Icons.flash_on, storm.intensity),
+            _buildLevelIconDisplay(Icons.cloud, storm.flux),
+          ]),
+          _buildNoteText(storm.notes),
         ],
       ),
     );
@@ -138,6 +91,8 @@ class StormTileState extends State<StormTile> {
         showDialog(
             builder: (BuildContext context) {
               return new Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(notes),

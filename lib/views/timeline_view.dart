@@ -72,19 +72,42 @@ class TimelineViewState extends State<TimelineView>
       return welcomeNote();
     }
 
-    return new SideHeaderListView(
+    return Stack(
+      children: [
+        new Positioned(
+          top: 0.0,
+          bottom: 0.0,
+          left: 14.0,
+          child: Opacity(
+            opacity: 0.5,
+            child: new Container(
+              height: double.infinity,
+              width: 4,
+              color: Theme.of(context).accentColor,
+            ),
+          ),
+        ),
+        _buildTimeLine(),
+      ],
+    );
+  }
+
+  Widget _buildTimeLine() {
+    return SideHeaderListView(
       itemCount: _stormsList.length,
       itemExtend: 100.0,
       headerBuilder: (BuildContext context, int index) {
-        return new YearHeader(_stormsList[index]);
+        return YearHeader(_stormsList[index]);
       },
       itemBuilder: (BuildContext context, int index) {
-        return new Card(
-          child: StormTile(
-            storm: _stormsList[index],
-            onDismiss: () => onStormDismissCallBack(_stormsList[index]),
-            onSave: () => _presenter.loadStormsList(),
-          ),
+        return Stack(
+          children: [
+            StormTile(
+              storm: _stormsList[index],
+              onDismiss: () => onStormDismissCallBack(_stormsList[index]),
+              onSave: () => _presenter.loadStormsList(),
+            ),
+          ],
         );
       },
       hasSameHeader: (int a, int b) {
