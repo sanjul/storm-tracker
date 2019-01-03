@@ -62,13 +62,23 @@ class StormRecordViewState extends State<StormRecordView>
   void _setEndDate() async {
     final DateTime picked = await showDatePicker(
         context: _context,
-        initialDate: _storm.endDatetime ?? DateTime.now(),
-        firstDate: _storm.startDatetime ?? DateTime(1990),
+        initialDate: _storm.endDatetime ?? 
+                _storm.startDatetime ?? DateTime.now(),
+        firstDate: DateTime(1990),
         lastDate: new DateTime.now());
     if (picked != null) {
-      setState(() {
-        _storm.endDatetime = picked;
-      });
+     
+        if(_storm.startDatetime != null && 
+            picked.isBefore(_storm.startDatetime)){
+           appUtil.showSnackBar(_scaffoldKey.currentState, 
+           "Invalid end date. Please verify.");
+        } else {
+           setState(() {
+          _storm.endDatetime = picked;
+          });
+        }
+        
+      
     }
   }
 

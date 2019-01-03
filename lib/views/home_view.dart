@@ -5,6 +5,7 @@ import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/modules/home_presenter.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:stormtr/ui/insights.dart';
 import 'package:stormtr/ui/status_tile.dart';
 
 class HomeView extends StatefulWidget {
@@ -63,44 +64,10 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   Widget homeBody() {
     List<Widget> _items = List<Widget>();
     _items.add(showLastStorm());
-
-    if (_homeData.stats.isNotEmpty)
-      _items.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(children: [
-          Icon(
-            Icons.wb_incandescent,
-            color: Theme.of(context).accentColor,
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text(
-            "Insights",
-            textScaleFactor: 1.5,
-            style: TextStyle(
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ]),
-      ));
-
-    _homeData.stats.forEach((stat) {
-      _items.add(
-        Opacity(
-          opacity: 0.8,
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(stat),
-            ),
-          ),
-        ),
-      );
-    });
+    _items.add(Insights(data:_homeData));
 
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(0),
       child: Stack(
         children: [
           _getMoodAnimation(),
@@ -120,29 +87,32 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
       _caption = _stormCaption(Icons.event_available, "Completed:");
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _caption,
-        SizedBox(height: 8.0),
-        StatusTile(
-          storm: _homeData.lastStorm,
-          onSave: () => _presenter.loadHome(),
-          onStopStorm: () {
-            _updateAnimation();
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _caption,
+          SizedBox(height: 8.0),
+          StatusTile(
+            storm: _homeData.lastStorm,
+            onSave: () => _presenter.loadHome(),
+            onStopStorm: () {
+              _updateAnimation();
+            },
+          ),
+        ],
+      ),
     );
   }
 
   Widget _getMoodAnimation() {
     return Opacity(
-        opacity: 0.5,
-          child: FlareActor(
+      opacity: 0.5,
+      child: FlareActor(
         'assets/animations/sunandstorm.flr',
         fit: BoxFit.contain,
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         animation: _moodAnimation,
         controller: animController,
         callback: (a) {

@@ -5,19 +5,19 @@ import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/modules/graph_presenter.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
 
-class GapVsDateChart extends StatefulWidget {
+class SunnyDaysChart extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new GapVsDateChartState();
+    return new SunnyDaysChartState();
   }
 }
 
-class GapVsDateChartState extends State<GapVsDateChart>
+class SunnyDaysChartState extends State<SunnyDaysChart>
     implements GraphViewContract {
   GraphViewPresenter _presenter;
   List<MyRow> _chartData;
   //constructor
-  GapVsDateChartState() {
+  SunnyDaysChartState() {
     _presenter = new GraphViewPresenter(this);
   }
 

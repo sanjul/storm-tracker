@@ -4,19 +4,19 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:stormtr/modules/graph_presenter.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
 
-class DurationVsDateChart extends StatefulWidget {
+class StormyDaysChart extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new DurationVsDateChartState();
+    return new StormyDaysChartState();
   }
 }
 
-class DurationVsDateChartState extends State<DurationVsDateChart>
+class StormyDaysChartState extends State<StormyDaysChart>
     implements GraphViewContract {
   GraphViewPresenter _presenter;
   List<MyRow> _chartData;
   //constructor
-  DurationVsDateChartState() {
+  StormyDaysChartState() {
     _presenter = new GraphViewPresenter(this);
   }
 

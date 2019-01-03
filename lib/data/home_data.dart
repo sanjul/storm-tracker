@@ -4,23 +4,35 @@ import 'package:stormtr/util/DateUtil.dart';
 class HomeData {
   List<Storm> _stormsList;
   Storm _lastStorm;
-  int _avgDuration = 0;
-  int _avgGap = 0;
-  int _totalDays = 0;
-  int _totalGap = 0;
+  int _avgStormyDays = 0;
+  int _avgSunnyDays = 0;
+  int _totalStormyDays = 0;
+  int _totalSunnyDays = 0;
+  int _shortestSunnyDays = 0;
+  int _shortestStormyDays = 0;
+  int _longestSunnyDays = 0;
+  int _longestStormyDays = 0;
 
-  int _diffCount = 0;
-  int _gapCount = 0;
+  int _stormSlotCount = 0;
+  int _sunSlotCount = 0;
   DateTime _predictedNextStormDate;
 
-  List<String> _stats = new List();
-  List<String> get stats => _stats;
+  String _prediction;
+  String get predictionText => _prediction;
 
   Storm get lastStorm => _lastStorm;
   bool get isEmpty => _stormsList.isEmpty;
   bool get isNotEmpty => !isEmpty;
   bool get isStormInProgress => _lastStorm?.endDatetime == null;
   bool get isNoStormInProgress => !isStormInProgress;
+
+  int get avgSunnyDays => _avgSunnyDays;
+  int get avgStormyDays => _avgStormyDays;
+  int get shortestSunnyDays => _shortestSunnyDays;
+  int get shortestStormyDays => _shortestStormyDays;
+  int get longestSunnyDays => _longestSunnyDays;
+  int get longestStormyDays => _longestStormyDays;
+  bool get canShowInsights => _avgStormyDays > 0;
 
   HomeData.prepare(List<Storm> stormsList) {
     _stormsList = stormsList;
@@ -29,36 +41,43 @@ class HomeData {
 
     _stormsList?.forEach((st) {
       if (st.startDatetime != null && st.endDatetime != null) {
-        int daysDiff = st.endDatetime.difference(st.startDatetime).inDays;
-        _totalDays += daysDiff;
-        _diffCount++;
+        int stormDuration = st.endDatetime.difference(st.startDatetime).inDays;
+        _totalStormyDays += stormDuration;
+        _stormSlotCount++;
+
+        if(stormDuration > _longestStormyDays){
+          _longestStormyDays = stormDuration;
+        }
+
+        if(_shortestStormyDays == 0 || stormDuration < _shortestStormyDays){
+          _shortestStormyDays = stormDuration;
+        }
+
       }
 
       if (_lastStorm?.endDatetime != null && st.startDatetime != null) {
-        _totalGap += st.startDatetime.difference(_lastStorm.endDatetime).inDays;
-        _gapCount++;
+        int sunDuration = st.startDatetime.difference(_lastStorm.endDatetime).inDays;
+        _totalSunnyDays += sunDuration;
+        _sunSlotCount++;
+
+        if(sunDuration > _longestSunnyDays){
+          _longestSunnyDays = sunDuration;
+        }
+
+        if(_shortestSunnyDays == 0 || sunDuration < _shortestSunnyDays){
+          _shortestSunnyDays = sunDuration;
+        }
+
       }
 
       _lastStorm = st;
     });
 
-    if (_totalDays > 0) _avgDuration = (_totalDays / _diffCount).round();
-    if (_gapCount > 0) _avgGap = (_totalGap / _gapCount).round();
-
-    /* Following code generates insights */
-    String stat = "";
-    if (_avgDuration > 0) stat = "On average, a storm lasts for about $_avgDuration days";
-    if (_gapCount > 0){
-      if(stat == "")
-       stat = "On average, there is about $_avgGap days between storms"; 
-      else 
-        stat += " with about $_avgGap days between storms";
-    } 
-    
-    if (stat != "") _stats.add(stat);
+    if (_totalStormyDays > 0) _avgStormyDays = (_totalStormyDays / _stormSlotCount).round();
+    if (_sunSlotCount > 0) _avgSunnyDays = (_totalSunnyDays / _sunSlotCount).round();
 
     if(isNoStormInProgress && stormsList.length > 1){
-      _predictedNextStormDate = _lastStorm.endDatetime.add(Duration(days: _avgGap));
+      _predictedNextStormDate = _lastStorm.endDatetime.add(Duration(days: _avgSunnyDays));
       String dispDate = dateUtil.formatDate(_predictedNextStormDate);
       int numDays= _predictedNextStormDate.difference(DateTime.now()).inDays;
       String addlInfo;
@@ -75,7 +94,7 @@ class HomeData {
         addlInfo = "likely be starting on $dispDate. That's $numDays days to go!";
       }
 
-      _stats.add("It seems, next storm $addlInfo");
+      _prediction = "It seems, next storm $addlInfo";
     }
   }
 }
