@@ -83,9 +83,9 @@ class HomeData {
       String addlInfo;
 
       if(numDays == -1){
-        addlInfo = "should have started yesterday. \nIf not, don't worry, Let's give it a day or two...";
+        addlInfo = "should ideally,have started yesterday. \nIf not, give it a day or two...";
       } else if(numDays < -1){
-        addlInfo = "should have started on $dispDate,\n which was about ${numDays.abs()} days ago... \nTake care...";
+        addlInfo = "should likely have started on $dispDate,\nwhich was about ${numDays.abs()} days ago...";
       } else if(numDays == 0){
         addlInfo = "might be starting TODAY!! Get storm-defences ready!";
       } else if(numDays == 1){
@@ -94,7 +94,7 @@ class HomeData {
         addlInfo = "likely be starting on $dispDate. That's $numDays days to go!";
       }
 
-      _prediction = "It seems, next storm $addlInfo";
+      _prediction = "Next storm $addlInfo";
     }
   }
 }

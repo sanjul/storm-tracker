@@ -20,7 +20,11 @@ class Insights extends StatelessWidget {
   }
 
   Widget _buildPrediction() {
-    if (data?.predictionText != null) return Text(data?.predictionText);
+    if (data?.predictionText != null) 
+      return Padding(
+        padding: const EdgeInsets.all(15),
+        child: Text(data?.predictionText),
+      );
 
     return Text('');
   }

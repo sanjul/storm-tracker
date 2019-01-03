@@ -158,7 +158,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
             .saveStormRecord(null, storm)
             .then((stormId) => _presenter.loadHome())
             .then((stormId) => _updateAnimation());
-      },
+      },highlightElevation: 10,
       tooltip: 'Start recording storm',
       child: new Icon(Icons.fiber_manual_record),
       backgroundColor: Colors.red,

@@ -1,3 +1,4 @@
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/graph_data.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -58,6 +59,7 @@ class SunnyDaysChartState extends State<SunnyDaysChart>
       _series,
       animate: true,
       domainAxis: new charts.DateTimeAxisSpec(
+        renderSpec: GridlineRendererSpec(),
         tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
           day: new charts.TimeFormatterSpec(
               format: 'd', transitionFormat: 'MM/dd/yyyy'),
