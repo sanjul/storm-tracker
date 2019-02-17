@@ -9,7 +9,7 @@ void main() {
     /* Make sure primaryDataSource is set to SQLLITE for production */
     primaryDataSource: DataSource.SQLLITE,
   );
-
+  
   runApp(new MaterialApp(
     home: new LandingView(),
     theme: new ThemeData(

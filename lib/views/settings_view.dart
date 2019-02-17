@@ -9,14 +9,21 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-       child: Column(children:[
-         Row(children: [
-           Text("Toggle Dark Theme"),
-           Switch(onChanged: (bool val){
-            // Theme.of(context). = Brightness.dark;
-           }, value: false,)
-         ],)
-       ])
+       child: Padding(
+         padding: const EdgeInsets.all(20),
+         child: Column(children:[
+           Row(children: [
+             Text("Toggle Dark Theme"),
+             Switch(onChanged: (bool val){
+              Brightness brightness = val ? Brightness.dark : Brightness.light;
+              setState((){
+               
+              });
+              
+             }, value: false,)
+           ],)
+         ]),
+       )
     );
   }
 }
