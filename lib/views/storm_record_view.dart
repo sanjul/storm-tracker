@@ -182,7 +182,9 @@ class StormRecordViewState extends State<StormRecordView>
           margin: const EdgeInsets.all(5.0),
           padding: const EdgeInsets.all(10.0),
           decoration: new BoxDecoration(
-              border: new Border.all(color: Theme.of(context).accentColor)),
+              border: new Border.all(
+                color: Theme.of(context).accentColor),
+                borderRadius: BorderRadius.circular(10),),
           child: new Text(
             displayDate != null
                 ? dateUtil.formatDate(displayDate)
@@ -201,7 +203,7 @@ class StormRecordViewState extends State<StormRecordView>
       maxLines: 5,
       decoration: const InputDecoration(
         hintText: 'Enter your notes about this storm',
-        border: const OutlineInputBorder(),
+        border:  const OutlineInputBorder(),
         contentPadding: const EdgeInsets.all(10.0),
       ),
     );
