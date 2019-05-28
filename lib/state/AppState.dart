@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState with ChangeNotifier {
 
-  final PREF_IS_DARK_MODE_ENABLED = "isDarkModeEnabled";
+  static const PREF_IS_DARK_MODE_ENABLED = "isDarkModeEnabled";
   SharedPreferences _prefs;
   
   AppState(SharedPreferences prefs)  {
