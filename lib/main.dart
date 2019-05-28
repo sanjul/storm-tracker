@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:stormtr/dependency_injection.dart';
-import 'views/landing_view.dart';
+import 'package:stormtr/state/AppState.dart';
+import 'package:stormtr/the_app.dart';
 
-void main() {
+Future main() async {
   
   Injector.configure(
     /* Make sure primaryDataSource is set to SQLLITE for production */
     primaryDataSource: DataSource.SQLLITE,
   );
-  
-  runApp(new MaterialApp(
-    home: new LandingView(),
-    theme: new ThemeData(
-      primarySwatch: Colors.purple,
-      brightness: Brightness.light,
-      fontFamily: "QuarmicSans",
-      // primaryColor: Colors.blueGrey,
-      // accentColor: Colors.blue,
-    ),
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  runApp(ChangeNotifierProvider<AppState>(
+    builder: (_) => AppState(prefs),
+    child: TheApp(),
   ));
 }

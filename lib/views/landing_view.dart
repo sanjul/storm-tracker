@@ -7,7 +7,7 @@ import '../ui/logo.dart';
 class LandingView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LandingViewState();
+    return  LandingViewState();
   }
 }
 
@@ -16,14 +16,14 @@ class LandingViewState extends State<LandingView>
   Animation<double> _logoAnimation;
   AnimationController _logoAnimationController;
 
-  final _opacityTween = new Tween<double>(begin: 0.1, end: 1.0);
+  final _opacityTween =  Tween<double>(begin: 0.1, end: 1.0);
 
   @override
   void initState() {
     super.initState();
-    _logoAnimationController = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 1000));
-    _logoAnimation = new CurvedAnimation(
+    _logoAnimationController =  AnimationController(
+        vsync: this, duration:  Duration(milliseconds: 1000));
+    _logoAnimation =  CurvedAnimation(
         parent: _logoAnimationController, curve: Curves.easeIn);
     _logoAnimationController.addListener(() => this.setState(() {}));
     _logoAnimationController.forward();
@@ -32,7 +32,7 @@ class LandingViewState extends State<LandingView>
       if (status == AnimationStatus.completed) {
         appUtil.gotoPage(
           context,
-          new AppNavigatorView(Config.navigatables),
+           AppNavigatorView(Config.navigatables),
         );
       }
     });
@@ -46,16 +46,16 @@ class LandingViewState extends State<LandingView>
 
   @override
   Widget build(BuildContext context) {
-    return new Material(
+    return  Material(
       color: Colors.black87,
-      child: new Column(
+      child:  Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Transform.translate(
-            offset: new Offset(0.0, _logoAnimation.value * -20),
-            child: new Opacity(
+           Transform.translate(
+            offset:  Offset(0.0, _logoAnimation.value * -20),
+            child:  Opacity(
               opacity: _opacityTween.evaluate(_logoAnimation),
-              child: new Logo(20.0, MainAxisAlignment.center),
+              child:  Logo(20.0, MainAxisAlignment.center),
             ),
           )
         ],

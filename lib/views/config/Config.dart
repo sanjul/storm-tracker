@@ -3,7 +3,6 @@ import 'package:stormtr/views/chart_stormy_days.dart';
 import 'package:stormtr/views/chart_sunny_days.dart';
 import 'package:stormtr/views/home_view.dart';
 import 'package:stormtr/views/navigation/navigatable.dart';
-import 'package:stormtr/views/settings_view.dart';
 import 'package:stormtr/views/timeline_view.dart';
 
 class Config {
@@ -37,9 +36,5 @@ class Config {
                 builder: () => SunnyDaysChart()),
           ],
         ),
-        Navigatable(
-            icon: Icons.settings,
-            title: "Settings",
-            builder: () => SettingsView())
       ];
 }

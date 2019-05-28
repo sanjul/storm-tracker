@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stormtr/state/AppState.dart';
 import 'package:stormtr/ui/logo.dart';
 import 'package:stormtr/views/navigation/app_navigator_view.dart';
 import 'package:stormtr/views/navigation/navigatable.dart';
@@ -40,6 +42,15 @@ class AppDrawerState extends State<AppDrawer> {
     }
 
     _list.add(Divider());
+    _list.add(ListTile(
+        title: Text("Dark Theme"),
+        trailing: Switch(
+          onChanged: (bool val) {
+            Provider.of<AppState>(context).setDarkModeEnabled(val);
+          },
+          value: Provider.of<AppState>(context).isDarkModeEnabled,
+        )
+    ));
     _list.add(
       ListTile(
         trailing: Icon(Icons.close),

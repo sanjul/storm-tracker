@@ -1,18 +1,23 @@
-// This is a basic Flutter widget test.
-// To perform an interaction with a widget in your test, use the WidgetTester utility that Flutter
-// provides. For example, you can send tap and scroll gestures. You can also use WidgetTester to
-// find child widgets in the widget tree, read text, and verify that the values of widget properties
-// are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stormtr/views/landing_view.dart';
+import 'package:stormtr/views/config/Config.dart';
+import 'package:stormtr/views/navigation/app_navigator_view.dart';
 
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Home View Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    // await tester.pumpWidget(new LandingView());
+    AppNavigatorView navigatorView = AppNavigatorView(Config.navigatables);
+    await tester.pumpWidget(buildTestableWidget(navigatorView));
+    
+    // Verify the tab icons
+    var homeIcon = find.byIcon(Icons.home);
+    var timelineIcon = find.byIcon(Icons.view_list);
+    expect(homeIcon, findsOneWidget);
+    expect(timelineIcon, findsOneWidget);
+
+    // expect(find.byIcon(Icons.add),findsOneWidget);
+    // expect(HomeView(), findsOneWidget);
 
     // // Verify that our counter starts at 0.
     // expect(find.text('0'), findsOneWidget);
@@ -27,3 +32,7 @@ void main() {
     // expect(find.text('1'), findsOneWidget);
   });
 }
+
+ Widget buildTestableWidget(Widget widget) {
+   return MediaQuery(data: MediaQueryData(), child: MaterialApp(home: widget));
+ }

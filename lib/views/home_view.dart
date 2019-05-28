@@ -16,7 +16,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> implements HomeViewContract {
   HomeData _homeData;
   String _moodAnimation = "sunnyday";
-  FlareController animController;
 
   HomePresenter _presenter;
   _HomeViewState() {
@@ -114,7 +113,6 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
         fit: BoxFit.contain,
         alignment: Alignment.bottomCenter,
         animation: _moodAnimation,
-        controller: animController,
         callback: (a) {
           if (a == "stormyday_ends") {
             _moodAnimation = "sunnyday";
