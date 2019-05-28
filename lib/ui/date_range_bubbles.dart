@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:stormtr/util/DateUtil.dart';
 
 class DateRangeBubbles extends StatelessWidget {
-  BuildContext _context;
   final DateTime startDate;
   final DateTime endDate;
 
@@ -13,7 +12,6 @@ class DateRangeBubbles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     int _random = new Random().nextInt(Colors.primaries.length);
     return new Row(
       mainAxisSize: MainAxisSize.min,

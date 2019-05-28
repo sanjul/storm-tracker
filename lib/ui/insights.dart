@@ -3,19 +3,17 @@ import 'package:stormtr/data/home_data.dart';
 
 class Insights extends StatelessWidget {
   final HomeData data;
-  BuildContext _context;
 
   Insights({this.data});
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     // if (_homeData.stats.isNotEmpty)
 
     return Padding(
       padding: const EdgeInsets.all(20),
       child:
-          Column(children: [_buildHeader(), _buildTable(), _buildPrediction()]),
+          Column(children: [_buildHeader(context), _buildTable(context), _buildPrediction()]),
     );
   }
 
@@ -29,7 +27,7 @@ class Insights extends StatelessWidget {
     return Text('');
   }
 
-  Widget _buildTable() {
+  Widget _buildTable(BuildContext context) {
 
     if(!data.canShowInsights){
       return Text("...");
@@ -39,7 +37,7 @@ class Insights extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Table(
           border:
-              TableBorder.all(width: 0.1, color: Theme.of(_context).accentColor),
+              TableBorder.all(width: 0.1, color: Theme.of(context).accentColor),
           children: [
             TableRow(children: [
               TableCell(
@@ -75,18 +73,18 @@ class Insights extends StatelessWidget {
       TableCell(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Text("${caption}"),
-        Text("${sunDays} days"),
-        Text("${stormDays} days"),
+        Text("$caption"),
+        Text("$sunDays days"),
+        Text("$stormDays days"),
       ]))
     ]);
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(children: [
       Icon(
         Icons.wb_incandescent,
-        color: Theme.of(_context).accentColor,
+        color: Theme.of(context).accentColor,
       ),
       SizedBox(
         width: 10.0,
@@ -95,7 +93,7 @@ class Insights extends StatelessWidget {
         "Insights",
         textScaleFactor: 1.5,
         style: TextStyle(
-          color: Theme.of(_context).accentColor,
+          color: Theme.of(context).accentColor,
         ),
       ),
     ]);
