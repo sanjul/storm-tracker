@@ -14,7 +14,7 @@ class Config {
           Navigatable(
             // title: "Home",
             icon: Icons.home,
-            builder: () => HomeView(),
+            builder: () => HomeView.buildWithState() ,
           ),
           Navigatable(
             // title: "Time Line",

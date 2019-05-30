@@ -15,8 +15,10 @@ Future main() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  runApp(ChangeNotifierProvider<AppState>(
-    builder: (_) => AppState(prefs),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AppState>.value(notifier: AppState(prefs),),
+    ],
     child: TheApp(),
   ));
 }

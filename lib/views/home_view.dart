@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stormtr/data/home_data.dart';
+import 'package:provider/provider.dart';
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/dependency_injection.dart';
-import 'package:stormtr/modules/home_presenter.dart';
+import 'package:stormtr/state/HomeState.dart';
 import 'package:stormtr/ui/WelcomeNote.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:stormtr/ui/insights.dart';
@@ -10,48 +10,41 @@ import 'package:stormtr/ui/status_tile.dart';
 
 class HomeView extends StatefulWidget {
   @override
-  _HomeViewState createState() => _HomeViewState();
+  HomeViewState createState() => HomeViewState();
+
+  static ChangeNotifierProvider buildWithState() {
+    return ChangeNotifierProvider<HomeState>(
+      builder: (_) {
+        HomeState state = HomeState();
+        state.loadHome();
+        return state;       
+      } ,
+      child: HomeView()
+    );
+  }
 }
 
-class _HomeViewState extends State<HomeView> implements HomeViewContract {
-  HomeData _homeData;
+class HomeViewState extends State<HomeView> {
   String _moodAnimation = "sunnyday";
-
-  HomePresenter _presenter;
-  _HomeViewState() {
-    _presenter = new HomePresenter(this);
-  }
+  HomeState _homeState;
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter.loadHome();
-  }
-
-  @override
-  void onError(error) {
-    print(error);
-  }
-
-  @override
-  void onLoadComplete(HomeData home) {
-    _homeData = home;
-    _updateAnimation();
-    setState(() {});
+  void setState(fn) {
+    super.setState(fn);
+    if (_homeState != null) {
+      _homeState.loadHome();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_homeData != null) {
+    _homeState = Provider.of<HomeState>(context);
+
+    if (_homeState.homeData != null) {
       return Scaffold(
         floatingActionButton: floatingButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        body: _homeData.isNotEmpty
+        body: _homeState.homeData.isNotEmpty
             ? homeBody()
             : WelcomeNote("Tap the record button when a storm begins"),
       );
@@ -63,7 +56,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   Widget homeBody() {
     List<Widget> _items = List<Widget>();
     _items.add(showLastStorm());
-    _items.add(Insights(data:_homeData));
+    _items.add(Insights(data: _homeState.homeData));
 
     return Container(
       padding: EdgeInsets.all(0),
@@ -80,7 +73,7 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
 
   Widget showLastStorm() {
     Widget _caption;
-    if (_homeData.lastStorm.endDateDB == null) {
+    if (_homeState.homeData.lastStorm.endDateDB == null) {
       _caption = _stormCaption(Icons.update, "In progress:");
     } else {
       _caption = _stormCaption(Icons.event_available, "Completed:");
@@ -94,8 +87,8 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
           _caption,
           SizedBox(height: 8.0),
           StatusTile(
-            storm: _homeData.lastStorm,
-            onSave: () => _presenter.loadHome(),
+            storm: _homeState.homeData.lastStorm,
+            onSave: () => _homeState.loadHome(),
             onStopStorm: () {
               _updateAnimation();
             },
@@ -119,7 +112,6 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
           } else if (a == "sunnyday_ends") {
             _moodAnimation = "stormyday";
           }
-          setState(() {});
         },
       ),
     );
@@ -127,8 +119,8 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
 
   void _updateAnimation() {
     String animationName = "sunnyday";
-    if (_homeData != null) {
-      if (_homeData.isStormInProgress) {
+    if (_homeState.homeData != null) {
+      if (_homeState.homeData.isStormInProgress) {
         animationName = "sunnyday_ends";
       } else {
         animationName = "stormyday_ends";
@@ -142,8 +134,8 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
   }
 
   Widget floatingButton() {
-    if (_homeData.lastStorm != null &&
-        _homeData.lastStorm.endDatetime == null) {
+    if (_homeState.homeData.lastStorm != null &&
+        _homeState.homeData.lastStorm.endDatetime == null) {
       return null;
     }
 
@@ -154,9 +146,10 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
         StormsData _stormsData = new Injector().stormsData;
         _stormsData
             .saveStormRecord(null, storm)
-            .then((stormId) => _presenter.loadHome())
+            .then((stormId) => _homeState.loadHome())
             .then((stormId) => _updateAnimation());
-      },highlightElevation: 10,
+      },
+      highlightElevation: 10,
       tooltip: 'Start recording storm',
       child: new Icon(Icons.fiber_manual_record),
       backgroundColor: Colors.red,
@@ -189,15 +182,4 @@ class _HomeViewState extends State<HomeView> implements HomeViewContract {
       ),
     ]);
   }
-
-  // Widget _glowingContainer({Widget child}) {
-  //   return Container(
-  //     child: child,
-  //     decoration: BoxDecoration(
-  //       boxShadow: [
-  //         BoxShadow(color: Colors.black, blurRadius: 30.0, spreadRadius: 10.0),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
