@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/modules/storms_list_presenter.dart';
+import 'package:stormtr/state/TimelineState.dart';
 import 'package:stormtr/ui/storm_tile.dart';
 import 'package:stormtr/ui/year_header.dart';
 import 'package:stormtr/views/storm_record_view.dart';
@@ -14,34 +15,30 @@ class TimelineView extends StatefulWidget {
   State<StatefulWidget> createState() {
     return new TimelineViewState();
   }
+
+    static ChangeNotifierProvider buildWithState() {
+    return ChangeNotifierProvider<TimelineState>(
+      builder: (_) {
+        TimelineState state = TimelineState();
+        state.loadStormsList();
+        return state;       
+      } ,
+      child: TimelineView()
+    );
+  }
 }
 
-class TimelineViewState extends State<TimelineView>
-    implements StormsListViewContract {
+class TimelineViewState extends State<TimelineView>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  StormsListPresenter _presenter;
-  List<Storm> _stormsList;
   bool _loadFailed;
-
-  //constructor
-  TimelineViewState() {
-    _presenter = new StormsListPresenter(this);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter.loadStormsList();
-  }
-
-  void onStormDismissCallBack(Storm storm) {
-    _presenter.deleteStorm(storm);
-    _presenter.loadStormsList();
-  }
-
+  TimelineState _timelineState;
+  
   @override
   Widget build(BuildContext context) {
+
+    _timelineState 
+      = Provider.of<TimelineState>(context);
+
     return new Scaffold(
       key: _scaffoldKey,
       body: _buildStormsListBody(),
@@ -50,7 +47,7 @@ class TimelineViewState extends State<TimelineView>
           Storm result =
               await appUtil.gotoPage(context, new StormRecordView(null), true);
           if (result != null) {
-            _presenter.loadStormsList();
+            _timelineState.loadStormsList();
           }
         },
         tooltip: 'Record a Storm',
@@ -64,11 +61,11 @@ class TimelineViewState extends State<TimelineView>
       return new Center(child: new Text("Load failed"));
     }
 
-    if (_stormsList == null) {
+    if (_timelineState.stormsList == null) {
       return new Center(child: CircularProgressIndicator());
     }
 
-    if (_stormsList.isEmpty) {
+    if (_timelineState.stormsList.isEmpty) {
       return welcomeNote();
     }
 
@@ -99,58 +96,46 @@ class TimelineViewState extends State<TimelineView>
 
   Widget _buildTimeLine() {
     return SideHeaderListView(
-      itemCount: _stormsList.length,
+      itemCount: _timelineState.stormsList.length,
       itemExtend: 100.0,
       headerBuilder: (BuildContext context, int index) {
-        return YearHeader(_stormsList[index]);
+        return YearHeader(_timelineState.stormsList[index]);
       },
       itemBuilder: (BuildContext context, int index) {
         return Stack(
           children: [
             StormTile(
-              storm: _stormsList[index],
-              onDismiss: () => onStormDismissCallBack(_stormsList[index]),
-              onSave: () => _presenter.loadStormsList(),
+              storm: _timelineState.stormsList[index],
+              onDismiss: () => onStormDismissCallBack(_timelineState.stormsList[index]),
+              onSave: () => _timelineState.loadStormsList(),
             ),
           ],
         );
       },
       hasSameHeader: (int a, int b) {
-        return _stormsList[a].startDatetime.year ==
-            _stormsList[b].startDatetime.year;
+        return _timelineState.stormsList[a].startDatetime.year ==
+            _timelineState.stormsList[b].startDatetime.year;
       },
     );
   }
 
-  @override
-  void onLoadStormsListComplete(List<Storm> stormsList) {
-    setState(() {
-      _stormsList = stormsList;
-      _stormsList.sort((a, b) => b.startDatetime.compareTo(a.startDatetime));
-      _loadFailed = false;
-    });
+  Future onStormDismissCallBack(Storm storm) async {
+    await _timelineState.deleteStorm(storm);
+    _timelineState.loadStormsList();
+    onStormDeleteComplete(storm);
   }
 
-  @override
-  void onError(dynamic err) {
-    _loadFailed = true;
-    print("Error occured: " + err.toString());
-    // TODO: implement onLoadStormsListError
-  }
-
-  @override
-  void onStormDeleteComplete(bool isDeleted, Storm storm) {
+  void onStormDeleteComplete(Storm storm) {
     String dispDate = dateUtil.formatDate(storm.startDatetime);
     appUtil.showSnackBar(
         _scaffoldKey.currentState, "Record of $dispDate deleted!", "Undo", () {
-      _presenter
+      _timelineState
           .undoStormDelete(storm)
-          .then((a) => _presenter.loadStormsList());
+          .then((storm) => onStormDeleteUndoComplete(storm));
     });
   }
 
-  @override
-  void onStormDeleteUndoComplete(Storm storm, int newStormId) {
+  void onStormDeleteUndoComplete(Storm storm) {
     String dispDate = dateUtil.formatDate(storm.startDatetime);
     appUtil.showSnackBar(
         _scaffoldKey.currentState, "Record of $dispDate restored!");

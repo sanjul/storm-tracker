@@ -19,7 +19,7 @@ class Config {
           Navigatable(
             // title: "Time Line",
             icon: Icons.view_list,
-            builder: () => TimelineView(),
+            builder: () => TimelineView.buildWithState(),
           )
         ]),
         Navigatable(
