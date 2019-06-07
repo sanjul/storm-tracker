@@ -14,11 +14,11 @@ class _TheAppState extends State<TheApp> {
     return MaterialApp(
       home: LandingView(),
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.red,
         brightness: Provider.of<AppState>(context).isDarkModeEnabled
             ? Brightness.dark
             : Brightness.light,
-        fontFamily: "QuarmicSans",
+        // fontFamily: "QuarmicSans",
         // primaryColor: Colors.blueGrey,
         // accentColor: Colors.blue,
       ),

@@ -10,7 +10,7 @@ Future main() async {
   
   Injector.configure(
     /* Make sure primaryDataSource is set to SQLLITE for production */
-    primaryDataSource: DataSource.SQLLITE,
+    primaryDataSource: DataSource.MOCK,
   );
 
   SharedPreferences prefs = await SharedPreferences.getInstance();

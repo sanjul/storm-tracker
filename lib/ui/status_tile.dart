@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/dependency_injection.dart';
 import 'package:stormtr/ui/date_range_bubbles.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/views/storm_record_view.dart';
@@ -8,10 +7,10 @@ import 'package:stormtr/views/storm_record_view.dart';
 class StatusTile extends StatefulWidget {
   final Storm storm;
   final VoidCallback onSave;
-  final VoidCallback onStopStorm;
+  final bool isSpecial;
 
   // constructor
-  StatusTile({@required this.storm, this.onSave, this.onStopStorm});
+  StatusTile({@required this.storm, this.onSave, this.isSpecial = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -47,31 +46,10 @@ class StatusTileState extends State<StatusTile> {
           DateRangeBubbles(
             startDate: storm.startDatetime,
             endDate: storm.endDatetime,
+            isSpecial: widget.isSpecial,
           ),
         ],
-      ),
-      trailing: (widget.onStopStorm != null && storm.endDatetime == null)
-          ? InkWell(
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Icon(
-                    Icons.stop,
-                    color: Colors.red,
-                  ),
-                  Text('Stop'),
-                ],
-              ),
-              onTap: () {
-                StormsData _stormsData = new Injector().stormsData;
-                storm.endDatetime = DateTime.now();
-                _stormsData
-                    .saveStormRecord(storm.id, storm)
-                    .then((stormId) => widget.onSave())
-                    .then((stormId) => widget.onStopStorm());
-              },
-            )
-          : null,
+      )
     );
   }
 }

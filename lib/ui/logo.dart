@@ -30,7 +30,7 @@ class Logo extends StatelessWidget {
                 //fontFamily: "Carolingia",
                 fontSize: this._size/1.5,
                 fontWeight: FontWeight.bold,
-                color: Colors.redAccent
+                color: Colors.white
               ),
             )
           ],

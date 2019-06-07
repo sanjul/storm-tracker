@@ -6,9 +6,13 @@ import 'package:stormtr/util/DateUtil.dart';
 class DateRangeBubbles extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
+  final bool isSpecial;
 
   //constructor
-  DateRangeBubbles({@required this.startDate, @required this.endDate});
+  DateRangeBubbles(
+      {@required this.startDate,
+      @required this.endDate,
+      this.isSpecial = false});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +21,14 @@ class DateRangeBubbles extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        _buildDateBubble(startDate, _random),
+        _buildDateBubble(startDate, _random, isSpecial),
         new Icon(Icons.chevron_right),
-        _buildDateBubble(endDate, _random),
+        _buildDateBubble(endDate, _random, isSpecial),
       ],
     );
   }
 
-  Widget _buildDateBubble(DateTime date, int color) {
+  Widget _buildDateBubble(DateTime date, int color, bool isSpecial) {
     Color bubbleColor;
     Widget bubbleChild;
     String month;
@@ -36,12 +40,12 @@ class DateRangeBubbles extends StatelessWidget {
       month = "";
       spaceHeight = 0.0;
     } else {
-      bubbleColor = Colors.primaries[color];
+      bubbleColor = isSpecial ? Colors.white : Colors.primaries[color];
       bubbleChild = Text(
         dateUtil.getDay(date),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: isSpecial ? Colors.black : Colors.white,
         ),
       );
       month = dateUtil.formatToMonth(date);
@@ -63,6 +67,12 @@ class DateRangeBubbles extends StatelessWidget {
           ),
           Text(
             month,
+            style: isSpecial
+                ? TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  )
+                : null,
           )
         ],
       ),

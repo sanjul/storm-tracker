@@ -12,7 +12,7 @@ dependencies:
   charts_flutter: ^0.4.0
   flare_flutter: ^1.5.1
   shared_preferences: ^0.5.2+1
-
+  animator: ^0.1.1
   
 
   
@@ -49,6 +49,7 @@ flutter:
   assets:
     - assets/icons/appIcon.png
     - assets/animations/
+    - assets/graphics/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

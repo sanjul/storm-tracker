@@ -35,9 +35,12 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
     Widget content = Scaffold(
       appBar: new AppBar(
         title: Text(_currentView != null ? _currentView.title : null),
-        bottom: _buildTabs(),
       ),
       body: _buildBody(),
+      bottomNavigationBar: Container(
+        child: _buildTabs(),
+        // color: Theme.of(context).accentColor,
+      ),
       drawer: AppDrawer(this),
     );
 
@@ -85,6 +88,8 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
         ));
       });
       return TabBar(
+        indicatorWeight: 5,
+        labelColor: Theme.of(context).accentColor,
         tabs: _tabs,
       );
     }
