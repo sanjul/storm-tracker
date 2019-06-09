@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:stormtr/dependency_injection.dart';
-import 'package:stormtr/state/AppState.dart';
+import 'package:stormtr/model/AppState.dart';
 import 'package:stormtr/the_app.dart';
 
 Future main() async {

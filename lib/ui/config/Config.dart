@@ -14,12 +14,12 @@ class Config {
           Navigatable(
             // title: "Home",
             icon: Icons.home,
-            builder: () => HomeView.buildWithState() ,
+            builder: () => HomeView.init() ,
           ),
           Navigatable(
             // title: "Time Line",
             icon: Icons.view_list,
-            builder: () => TimelineView.buildWithState(),
+            builder: () => TimelineView.init(),
           )
         ]),
         Navigatable(
@@ -29,11 +29,11 @@ class Config {
             Navigatable(
                 icon: Icons.cloud,
                 title: "Stormy Days",
-                builder: () => StormyDaysChart.buildWithState()),
+                builder: () => StormyDaysChart.init()),
             Navigatable(
                 icon: Icons.wb_sunny,
                 title: "Sunny days",
-                builder: () => SunnyDaysChart.buildWithState()),
+                builder: () => SunnyDaysChart.init()),
           ],
         ),
       ];

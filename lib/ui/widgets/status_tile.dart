@@ -29,7 +29,7 @@ class StatusTileState extends State<StatusTile> {
         key: _tileKey,
         onTap: () async {
           Storm result = await appUtil.gotoPage(
-              context, new StormRecordView(stormId), true);
+              context, StormRecordView.init(stormId), true);
 
           if (result != null) {
             widget.onSave();

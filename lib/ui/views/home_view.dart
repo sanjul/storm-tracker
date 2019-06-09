@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stormtr/state/HomeState.dart';
+import 'package:stormtr/model/HomeState.dart';
 import 'package:stormtr/ui/widgets/Cover.dart';
 import 'package:stormtr/ui/widgets/WelcomeNote.dart';
 import 'package:stormtr/ui/widgets/insights.dart';
@@ -10,7 +10,7 @@ class HomeView extends StatefulWidget {
   @override
   HomeViewState createState() => HomeViewState();
 
-  static ChangeNotifierProvider buildWithState() {
+  static ChangeNotifierProvider init() {
     return ChangeNotifierProvider<HomeState>(
         builder: (_) {
           HomeState state = HomeState();

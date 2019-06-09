@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stormtr/state/AppState.dart';
+import 'package:stormtr/model/AppState.dart';
 import 'package:stormtr/ui/widgets/logo.dart';
 import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 import 'package:stormtr/ui/navigation/navigatable.dart';

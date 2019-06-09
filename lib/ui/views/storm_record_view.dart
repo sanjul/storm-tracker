@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stormtr/data/storms_data.dart';
+import 'package:stormtr/model/StormRecordState.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/util/DateUtil.dart';
-import 'package:stormtr/modules/storm_record_presenter.dart';
 
 class StormRecordView extends StatefulWidget {
   final int _stormId;
@@ -10,33 +11,30 @@ class StormRecordView extends StatefulWidget {
 
   int get inputStormId => _stormId;
 
+  static ChangeNotifierProvider init(int stormId) {
+    return ChangeNotifierProvider<StormRecordState>(
+        builder: (_) {
+          StormRecordState state = StormRecordState();
+          state.loadStorm(stormId);
+          return state;
+        },
+        child: StormRecordView(stormId));
+  }
+
   @override
   State<StatefulWidget> createState() {
     return new StormRecordViewState();
   }
 }
 
-class StormRecordViewState extends State<StormRecordView>
-    implements StormsRecordViewContract {
-  StormsRecordPresenter _presenter;
-
+class StormRecordViewState extends State<StormRecordView> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final notesController = new TextEditingController();
-  Storm _storm;
   BuildContext _context;
-
-  //constructor
-  StormRecordViewState() {
-    _presenter = new StormsRecordPresenter(this);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter.loadStorm(widget.inputStormId);
-  }
+  StormRecordState _state;
+  Storm _storm;
 
   void _setStartDate() async {
     final DateTime picked = await showDatePicker(
@@ -62,23 +60,20 @@ class StormRecordViewState extends State<StormRecordView>
   void _setEndDate() async {
     final DateTime picked = await showDatePicker(
         context: _context,
-        initialDate: _storm.endDatetime ?? 
-                _storm.startDatetime ?? DateTime.now(),
+        initialDate:
+            _state.storm.endDatetime ?? _state.storm.startDatetime ?? DateTime.now(),
         firstDate: DateTime(1990),
         lastDate: new DateTime.now());
     if (picked != null) {
-     
-        if(_storm.startDatetime != null && 
-            picked.isBefore(_storm.startDatetime)){
-           appUtil.showSnackBar(_scaffoldKey.currentState, 
-           "Invalid end date. Please verify.");
-        } else {
-           setState(() {
+      if (_storm.startDatetime != null &&
+          picked.isBefore(_storm.startDatetime)) {
+        appUtil.showSnackBar(
+            _scaffoldKey.currentState, "Invalid end date. Please verify.");
+      } else {
+        setState(() {
           _storm.endDatetime = picked;
-          });
-        }
-        
-      
+        });
+      }
     }
   }
 
@@ -92,12 +87,16 @@ class StormRecordViewState extends State<StormRecordView>
         return;
       }
 
-      _presenter.saveStorm(widget.inputStormId, _storm);
+      _state.saveStorm(widget.inputStormId, _storm).then((stormId) {
+        appUtil.popPage(context, this._storm);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _state = Provider.of<StormRecordState>(context);
+    _storm = _state.storm;
     _context = context;
 
     Widget _saveButton = new IconButton(
@@ -173,7 +172,6 @@ class StormRecordViewState extends State<StormRecordView>
         children: <Widget>[
           Icon(Icons.calendar_today),
           Text(label),
-          
         ],
       ),
       new InkWell(
@@ -182,9 +180,9 @@ class StormRecordViewState extends State<StormRecordView>
           margin: const EdgeInsets.all(5.0),
           padding: const EdgeInsets.all(10.0),
           decoration: new BoxDecoration(
-              border: new Border.all(
-                color: Theme.of(context).accentColor),
-                borderRadius: BorderRadius.circular(10),),
+            border: new Border.all(color: Theme.of(context).accentColor),
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: new Text(
             displayDate != null
                 ? dateUtil.formatDate(displayDate)
@@ -203,7 +201,7 @@ class StormRecordViewState extends State<StormRecordView>
       maxLines: 5,
       decoration: const InputDecoration(
         hintText: 'Enter your notes about this storm',
-        border:  const OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.all(10.0),
       ),
     );
@@ -255,22 +253,5 @@ class StormRecordViewState extends State<StormRecordView>
         min: 0.0,
       )
     ];
-  }
-
-  @override
-  void onLoadStormComplete(Storm storm) {
-    setState(() {
-      this._storm = storm == null ? new Storm() : storm;
-    });
-  }
-
-  @override
-  void onError(error) {
-    appUtil.showSnackBar(_scaffoldKey.currentState, "Error:" + error);
-  }
-
-  @override
-  void onSaveStormComplete(int stormId) {
-    appUtil.popPage(context, this._storm);
   }
 }

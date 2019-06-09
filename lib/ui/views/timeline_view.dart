@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/state/TimelineState.dart';
+import 'package:stormtr/model/TimelineState.dart';
 import 'package:stormtr/ui/widgets/storm_tile.dart';
 import 'package:stormtr/ui/widgets/year_header.dart';
 import 'package:stormtr/ui/views/storm_record_view.dart';
@@ -16,7 +16,7 @@ class TimelineView extends StatefulWidget {
     return new TimelineViewState();
   }
 
-    static ChangeNotifierProvider buildWithState() {
+    static ChangeNotifierProvider init() {
     return ChangeNotifierProvider<TimelineState>(
       builder: (_) {
         TimelineState state = TimelineState();
@@ -45,7 +45,7 @@ class TimelineViewState extends State<TimelineView>{
       floatingActionButton: new FloatingActionButton(
         onPressed: () async {
           Storm result =
-              await appUtil.gotoPage(context, new StormRecordView(null), true);
+              await appUtil.gotoPage(context, StormRecordView.init(null), true);
           if (result != null) {
             _timelineState.loadStormsList();
           }

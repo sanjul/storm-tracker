@@ -2,11 +2,11 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:stormtr/state/ChartState.dart';
+import 'package:stormtr/model/ChartState.dart';
 import 'package:stormtr/ui/widgets/WelcomeNote.dart';
 
 class StormyDaysChart extends StatelessWidget {
-  static ChangeNotifierProvider buildWithState() {
+  static ChangeNotifierProvider init() {
     return ChangeNotifierProvider<ChartState>(
         builder: (_) {
           ChartState state = ChartState();
