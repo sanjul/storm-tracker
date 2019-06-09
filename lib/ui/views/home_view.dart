@@ -35,7 +35,6 @@ class HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     _homeState = Provider.of<HomeState>(context);
-    bool isSunny = _homeState.mood == Mood.SUNNY_DAY;
 
     if (_homeState.homeData != null) {
       return Scaffold(

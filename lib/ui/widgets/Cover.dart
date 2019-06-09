@@ -17,7 +17,6 @@ class Cover extends StatelessWidget {
 
 Widget _buildCover(BuildContext context) {
   HomeState _homeState = Provider.of<HomeState>(context);
-  bool isSunny = _homeState.mood == Mood.SUNNY_DAY;
 
   return Container(
     height: 150,
