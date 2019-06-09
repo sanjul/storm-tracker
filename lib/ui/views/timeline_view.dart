@@ -4,9 +4,9 @@ import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/state/TimelineState.dart';
-import 'package:stormtr/ui/storm_tile.dart';
-import 'package:stormtr/ui/year_header.dart';
-import 'package:stormtr/views/storm_record_view.dart';
+import 'package:stormtr/ui/widgets/storm_tile.dart';
+import 'package:stormtr/ui/widgets/year_header.dart';
+import 'package:stormtr/ui/views/storm_record_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
 import 'package:stormtr/util/DateUtil.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stormtr/views/chart_stormy_days.dart';
-import 'package:stormtr/views/chart_sunny_days.dart';
-import 'package:stormtr/views/home_view.dart';
-import 'package:stormtr/views/navigation/navigatable.dart';
-import 'package:stormtr/views/timeline_view.dart';
+import 'package:stormtr/ui/views/chart_stormy_days.dart';
+import 'package:stormtr/ui/views/chart_sunny_days.dart';
+import 'package:stormtr/ui/views/home_view.dart';
+import 'package:stormtr/ui/navigation/navigatable.dart';
+import 'package:stormtr/ui/views/timeline_view.dart';
 
 class Config {
   /// Navigatables.
@@ -29,11 +29,11 @@ class Config {
             Navigatable(
                 icon: Icons.cloud,
                 title: "Stormy Days",
-                builder: () => StormyDaysChart()),
+                builder: () => StormyDaysChart.buildWithState()),
             Navigatable(
                 icon: Icons.wb_sunny,
                 title: "Sunny days",
-                builder: () => SunnyDaysChart()),
+                builder: () => SunnyDaysChart.buildWithState()),
           ],
         ),
       ];

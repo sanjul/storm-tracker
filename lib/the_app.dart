@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stormtr/state/AppState.dart';
-import 'package:stormtr/views/landing_view.dart';
+import 'package:stormtr/ui/views/landing_view.dart';
 
 class TheApp extends StatefulWidget {
   @override

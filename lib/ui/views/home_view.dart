@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stormtr/state/HomeState.dart';
-import 'package:stormtr/ui/Cover.dart';
-import 'package:stormtr/ui/WelcomeNote.dart';
-import 'package:stormtr/ui/insights.dart';
+import 'package:stormtr/ui/widgets/Cover.dart';
+import 'package:stormtr/ui/widgets/WelcomeNote.dart';
+import 'package:stormtr/ui/widgets/insights.dart';
 import 'package:animator/animator.dart';
 
 class HomeView extends StatefulWidget {

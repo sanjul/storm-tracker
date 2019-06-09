@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:stormtr/views/navigation/appdrawer_view.dart';
-import 'package:stormtr/views/navigation/navigatable.dart';
+import 'package:stormtr/ui/navigation/appdrawer_view.dart';
+import 'package:stormtr/ui/navigation/navigatable.dart';
 
 class AppNavigatorView extends StatefulWidget {
   final List<Navigatable> _navigatables;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stormtr/state/AppState.dart';
-import 'package:stormtr/ui/logo.dart';
-import 'package:stormtr/views/navigation/app_navigator_view.dart';
-import 'package:stormtr/views/navigation/navigatable.dart';
+import 'package:stormtr/ui/widgets/logo.dart';
+import 'package:stormtr/ui/navigation/app_navigator_view.dart';
+import 'package:stormtr/ui/navigation/navigatable.dart';
 
 class AppDrawer extends StatefulWidget {
   final AppNavigatorViewState _navigatorViewState;

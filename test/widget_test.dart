@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stormtr/views/config/Config.dart';
-import 'package:stormtr/views/navigation/app_navigator_view.dart';
+import 'package:stormtr/ui/config/Config.dart';
+import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 
 
 void main() {

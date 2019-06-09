@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/storms_data.dart';
-import 'package:stormtr/ui/date_range_bubbles.dart';
+import 'package:stormtr/ui/widgets/date_range_bubbles.dart';
 import 'package:stormtr/util/AppUtil.dart';
-import 'package:stormtr/views/storm_record_view.dart';
+import 'package:stormtr/ui/views/storm_record_view.dart';
 
 class StormTile extends StatefulWidget {
   final Storm storm;
