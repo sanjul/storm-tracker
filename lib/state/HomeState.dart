@@ -1,3 +1,4 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stormtr/data/home_data.dart';
 import 'package:stormtr/data/storms_data.dart';
@@ -63,5 +64,23 @@ class HomeState extends ChangeNotifier {
     _stormsData.saveStormRecord(currentStorm.id, currentStorm).then((stormId) {
       loadHome();
     });
+  }
+
+  Tween<double> getTween(double min, double max){
+    double begin, end;
+
+    if(mood == Mood.SUNNY_DAY){
+      begin = min;
+      end = max;
+    } else {
+      begin = max;
+      end = min;
+    }
+
+    if(isAnimLoopStarted){
+      begin = end;
+    } 
+
+    return Tween<double>(begin: begin, end: end);   
   }
 }

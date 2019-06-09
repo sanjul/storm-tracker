@@ -34,6 +34,7 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
   Widget build(BuildContext context) {
     Widget content = Scaffold(
       appBar: new AppBar(
+        
         title: Text(_currentView != null ? _currentView.title : null),
       ),
       body: _buildBody(),

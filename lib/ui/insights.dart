@@ -12,25 +12,33 @@ class Insights extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(20),
-      child:
-          Column(children: [_buildHeader(context), _buildTable(context), _buildPrediction()]),
+      child: Column(children: [
+        _buildHeader(context),
+        _buildTable(context),
+        _buildPrediction(),
+      ]),
     );
   }
 
   Widget _buildPrediction() {
-    if (data?.predictionText != null) 
+    if (data?.predictionText != null)
       return Padding(
-        padding: const EdgeInsets.all(15),
-        child: Text(data?.predictionText),
+        padding: const EdgeInsets.all(20.0),
+        child: Card(
+          elevation: 6,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(data?.predictionText),
+          ),
+        ),
       );
 
     return Text('');
   }
 
   Widget _buildTable(BuildContext context) {
-
-    if(!data.canShowInsights){
-      return Text("...");
+    if (!data.canShowInsights) {
+      return Container();
     }
 
     return Padding(

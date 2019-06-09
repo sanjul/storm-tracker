@@ -39,8 +39,11 @@ class HomeViewState extends State<HomeView> {
 
     if (_homeState.homeData != null) {
       return Scaffold(
-        // floatingActionButton: isSunny ? floatingButton() : null,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton:
+            _homeState.homeData.isEmpty || _homeState.mood == Mood.SUNNY_DAY
+                ? floatingButton()
+                : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: _homeState.homeData.isNotEmpty
             ? homeBody(context)
             : WelcomeNote("Tap the record button when a storm begins"),
@@ -52,7 +55,11 @@ class HomeViewState extends State<HomeView> {
 
   Widget homeBody(BuildContext context) {
     List<Widget> _items = List<Widget>();
-    _items.add(showStatusMessageAndButton(context));
+
+    if (_homeState.mood == Mood.STORMY_DAY) {
+      _items.add(buildMarkStormEndButton(context));
+    }
+
     _items.add(Insights(data: _homeState.homeData));
 
     return Container(
@@ -60,7 +67,7 @@ class HomeViewState extends State<HomeView> {
         children: [
           Cover(),
           Padding(
-            padding: const EdgeInsets.only(top: 110),
+            padding: const EdgeInsets.only(top: 120),
             child: ListView(
               children: _items,
             ),
@@ -70,19 +77,25 @@ class HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget showStatusMessageAndButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[floatingButton()],
+  Widget buildMarkStormEndButton(BuildContext context) {
+    if (_homeState.mood == Mood.SUNNY_DAY) {
+      return null;
+    }
+
+    return Animator(
+      tweenMap: {"padding": _homeState.getTween(0,60)},
+      cycles: 1,
+      duration: Duration(seconds: 1),
+      builderMap: (Map<String, Animation> anim) => Padding(
+            padding: EdgeInsets.only(top: anim["padding"].value),
+            child: Align(
+              alignment: Alignment(-0.3, 0),
+              child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[floatingButton()]),
+            ),
           ),
-          SizedBox(height: 8.0),
-        ],
-      ),
     );
   }
 
@@ -100,33 +113,20 @@ class HomeViewState extends State<HomeView> {
         backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       );
+    } else {
+      button = FloatingActionButton.extended(
+        heroTag: "recordControllerBtn",
+        onPressed: _homeState.startStormRecord,
+        highlightElevation: 10,
+        tooltip: 'Start recording storm',
+        icon: Icon(Icons.fiber_manual_record),
+        label: Text("Start Recording"),
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+      );
     }
 
-    button = FloatingActionButton.extended(
-      heroTag: "recordControllerBtn",
-      onPressed: _homeState.startStormRecord,
-      highlightElevation: 10,
-      tooltip: 'Start recording storm',
-      icon: Icon(Icons.fiber_manual_record),
-      label: Text("Start Recording"),
-      backgroundColor: Colors.red,
-      foregroundColor: Colors.white,
-    );
-
-    return Animator(
-      tweenMap: {
-        "opacity": Tween<double>(
-          begin: 0.8,
-          end: 1.0,
-        ),
-      },
-      cycles: 0,
-      duration: Duration(seconds: 2),
-      builderMap: (Map<String, Animation> anim) => Opacity(
-            child: button,
-            opacity: anim["opacity"].value,
-          ),
-    );
+    return button;
   }
 
   Widget showProgress() {
