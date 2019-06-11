@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stormtr/ui/views/ManageGenDataView.dart';
 import 'package:stormtr/ui/views/chart_stormy_days.dart';
 import 'package:stormtr/ui/views/chart_sunny_days.dart';
 import 'package:stormtr/ui/views/home_view.dart';
@@ -14,7 +15,7 @@ class Config {
           Navigatable(
             // title: "Home",
             icon: Icons.home,
-            builder: () => HomeView.init() ,
+            builder: () => HomeView.init(),
           ),
           Navigatable(
             // title: "Time Line",
@@ -36,5 +37,15 @@ class Config {
                 builder: () => SunnyDaysChart.init()),
           ],
         ),
+        // Navigatable(
+        //   icon: Icons.ac_unit,
+        //   title: "Data",
+        //   tabs: [
+        //     Navigatable(
+        //         icon: Icons.ac_unit,
+        //         title: "Generate Data",
+        //         builder: () => ManageGenDataView.init()),
+        //   ],
+        // )
       ];
 }
