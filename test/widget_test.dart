@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stormtr/ui/config/Config.dart';
 import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 
 
 void main() {
   testWidgets('Home View Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    AppNavigatorView navigatorView = AppNavigatorView(Config.navigatables);
+    AppNavigatorView navigatorView = AppNavigatorView();
     await tester.pumpWidget(buildTestableWidget(navigatorView));
     
     // Verify the tab icons

@@ -53,24 +53,17 @@ class HomeViewState extends State<HomeView> {
   }
 
   Widget homeBody(BuildContext context) {
-    List<Widget> _items = List<Widget>();
-
-    if (_homeState.mood == Mood.STORMY_DAY) {
-      _items.add(buildMarkStormEndButton(context));
-    }
-
-    _items.add(Insights(data: _homeState.homeData));
-
     return Container(
       child: Stack(
         children: [
-          Cover(),
           Padding(
             padding: const EdgeInsets.only(top: 120),
-            child: ListView(
-              children: _items,
-            ),
+            child: Insights(data: _homeState.homeData),
           ),
+          Cover(),
+
+          if (_homeState.mood == Mood.STORMY_DAY)
+            buildMarkStormEndButton(context),
         ],
       ),
     );
@@ -82,19 +75,17 @@ class HomeViewState extends State<HomeView> {
     }
 
     return Animator(
-      tweenMap: {"padding": _homeState.getTween(0,60)},
+      tweenMap: {"pos": _homeState.getTween(80, 100)},
       cycles: 1,
       duration: Duration(seconds: 1),
-      builderMap: (Map<String, Animation> anim) => Padding(
-            padding: EdgeInsets.only(top: anim["padding"].value),
-            child: Align(
-              alignment: Alignment(-0.3, 0),
-              child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[floatingButton()]),
-            ),
-          ),
+      builderMap: (Map<String, Animation> anim) => Align(
+        alignment: Alignment(0, 0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: anim["pos"].value),
+              floatingButton()]),
+      ),
     );
   }
 

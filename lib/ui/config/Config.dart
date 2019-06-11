@@ -30,22 +30,22 @@ class Config {
             Navigatable(
                 icon: Icons.cloud,
                 title: "Stormy Days",
-                builder: () => StormyDaysChart.init()),
+                builder: () => StormyDaysChart()),
             Navigatable(
                 icon: Icons.wb_sunny,
                 title: "Sunny days",
-                builder: () => SunnyDaysChart.init()),
+                builder: () => SunnyDaysChart()),
           ],
         ),
-        // Navigatable(
-        //   icon: Icons.ac_unit,
-        //   title: "Data",
-        //   tabs: [
-        //     Navigatable(
-        //         icon: Icons.ac_unit,
-        //         title: "Generate Data",
-        //         builder: () => ManageGenDataView.init()),
-        //   ],
-        // )
+        Navigatable(
+          icon: Icons.ac_unit,
+          title: "Data",
+          tabs: [
+            Navigatable(
+                icon: Icons.ac_unit,
+                title: "Generate Data",
+                builder: () => ManageGenDataView.init()),
+          ],
+        )
       ];
 }

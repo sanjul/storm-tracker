@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/data/home_data.dart';
+import 'package:stormtr/model/ChartState.dart';
+import 'package:stormtr/ui/widgets/TImeSeriesChart.dart';
 
 class Insights extends StatelessWidget {
   final HomeData data;
@@ -12,10 +14,14 @@ class Insights extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: Column(children: [
+      child: ListView(children: [
         _buildHeader(context),
-        _buildTable(context),
         _buildPrediction(),
+
+        _buildChart(ChartType.SUNNY_DAYS),
+        _buildChart(ChartType.STORMY_DAYS),
+
+        _buildTable(context),
       ]),
     );
   }
@@ -105,5 +111,28 @@ class Insights extends StatelessWidget {
         ),
       ),
     ]);
+  }
+
+  _buildChart(ChartType chartType) {
+    return Card(
+      elevation: 6,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              chartType == ChartType.STORMY_DAYS ? "Stormy Days" : "Sunny Days",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Container(
+                width: 500,
+                height: 200,
+                child: TimeSeriesChart.init(chartType)),
+          ],
+        ),
+      ),
+    );
   }
 }
