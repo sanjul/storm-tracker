@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:stormtr/ui/config/Config.dart';
 
 import 'package:stormtr/ui/navigation/appdrawer_view.dart';
 import 'package:stormtr/ui/navigation/navigatable.dart';
 
 class AppNavigatorView extends StatefulWidget {
-  final List<Navigatable> _navigatables;
-
   @override
   AppNavigatorViewState createState() => AppNavigatorViewState();
-
-  AppNavigatorView(this._navigatables);
 }
 
 class AppNavigatorViewState extends State<AppNavigatorView> {
@@ -22,7 +19,7 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
   @override
   void initState() {
     /* List of views that can be loaded in home view */
-    _views = widget._navigatables;
+    _views = Config.navigatables;
 
     /* Set Home view as the default view */
     _currentView = _views[0];

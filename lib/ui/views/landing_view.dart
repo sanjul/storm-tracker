@@ -34,7 +34,7 @@ class LandingViewState extends State<LandingView>
       if (status == AnimationStatus.completed) {
         appUtil.gotoPage(
           context,
-           AppNavigatorView(Config.navigatables),
+           AppNavigatorView(),
         );
       }
     });

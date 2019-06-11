@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stormtr/model/AppState.dart';
+import 'package:stormtr/ui/config/Config.dart';
 import 'package:stormtr/ui/widgets/logo.dart';
 import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 import 'package:stormtr/ui/navigation/navigatable.dart';
@@ -27,10 +28,10 @@ class AppDrawerState extends State<AppDrawer> {
       ),
     ];
 
-    for (Navigatable view in widget._navigatorViewState.views) {
+    for (Navigatable view in Config.navigatables) {
       _list.add(
         ListTile(
-          selected: view == widget._navigatorViewState.currentView,
+          selected: view.title == widget._navigatorViewState.currentView.title,
           trailing: Icon(view.icon),
           title: Text(view.title),
           onTap: () {
