@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stormtr/ui/widgets/logo.dart';
-import 'package:stormtr/ui/config/Config.dart';
 import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
 
