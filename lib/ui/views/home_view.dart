@@ -6,9 +6,7 @@ import 'package:stormtr/ui/widgets/WelcomeNote.dart';
 import 'package:stormtr/ui/widgets/insights.dart';
 import 'package:animator/animator.dart';
 
-class HomeView extends StatefulWidget {
-  @override
-  HomeViewState createState() => HomeViewState();
+class HomeView extends StatelessWidget {
 
   static ChangeNotifierProvider init() {
     return ChangeNotifierProvider<HomeState>(
@@ -19,28 +17,17 @@ class HomeView extends StatefulWidget {
         },
         child: HomeView());
   }
-}
-
-class HomeViewState extends State<HomeView> {
-  HomeState _homeState;
-
-  @override
-  void setState(fn) {
-    super.setState(fn);
-    if (_homeState != null) {
-      _homeState.loadHome();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    _homeState = Provider.of<HomeState>(context);
+    
+    HomeState _homeState = Provider.of<HomeState>(context);
 
     if (_homeState.homeData != null) {
       return Scaffold(
         floatingActionButton:
             _homeState.homeData.isEmpty || _homeState.mood == Mood.SUNNY_DAY
-                ? floatingButton()
+                ? floatingButton(context)
                 : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: _homeState.homeData.isNotEmpty
@@ -53,6 +40,9 @@ class HomeViewState extends State<HomeView> {
   }
 
   Widget homeBody(BuildContext context) {
+
+    HomeState _homeState = Provider.of<HomeState>(context);
+
     return Container(
       child: Stack(
         children: [
@@ -70,6 +60,9 @@ class HomeViewState extends State<HomeView> {
   }
 
   Widget buildMarkStormEndButton(BuildContext context) {
+
+    HomeState _homeState = Provider.of<HomeState>(context);
+
     if (_homeState.mood == Mood.SUNNY_DAY) {
       return null;
     }
@@ -84,12 +77,15 @@ class HomeViewState extends State<HomeView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: anim["pos"].value),
-              floatingButton()]),
+              floatingButton(context)]),
       ),
     );
   }
 
-  Widget floatingButton() {
+  Widget floatingButton(BuildContext context) {
+
+    HomeState _homeState = Provider.of<HomeState>(context);
+
     Widget button;
     if (_homeState.homeData.lastStorm != null &&
         _homeState.homeData.lastStorm.endDatetime == null) {
