@@ -16,44 +16,43 @@ class Cover extends StatelessWidget {
 }
 
 Widget _buildCover(BuildContext context) {
-  HomeState _homeState = Provider.of<HomeState>(context);
-
   return Container(
-    height: 150,
+    height: 190,
+    child: Container(
+      child: Stack(
+        children: <Widget>[
+          _buildAnimatedBackground(context),
+          _buildMoodAnimation(context),
+          _showLastStormAndCaption(context),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildAnimatedBackground(BuildContext context) {
+  HomeState _homeState = Provider.of<HomeState>(context);
+  return SizedBox.expand(
     child: Animator(
-      tweenMap: {"curveOffset": _homeState.getTween(0,60),
-                 "shadowBlur": _homeState.getTween(150, 600),
-                 "shadowOffset": _homeState.getTween(10, -200),},
+      tweenMap: {
+        "shadowBlur": _homeState.getTween(150, 600),
+        "shadowOffset": _homeState.getTween(10, -200),
+      },
       cycles: 1,
-      duration: Duration(seconds: 1),
-      builderMap: (Map<String, Animation> anim) => ClipPath(
-            clipper: CoverClipper(anim["curveOffset"].value),
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  SizedBox.expand(
-                    child: AnimatedContainer(
-                      foregroundDecoration: BoxDecoration(
-                        boxShadow: [
-                          new BoxShadow(
-                            blurRadius: anim["shadowBlur"].value,
-                            color: Colors.black,
-                            offset: Offset(150, anim["shadowOffset"].value),
-                          ),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(ASSET_SUNNY_DAY_IMAGE),
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                      duration: Duration(seconds: 2),
-                    ),
-                  ),
-                  _buildMoodAnimation(context),
-                  showLastStormAndCaption(context),
-                ],
+      builderMap: (Map<String, Animation> anim) => Container(
+            foregroundDecoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: anim["shadowBlur"].value,
+                  color: Colors.black,
+                  offset: Offset(150, anim["shadowOffset"].value),
+                ),
+              ],
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(ASSET_SUNNY_DAY_IMAGE),
+                fit: BoxFit.fitWidth,
               ),
             ),
           ),
@@ -62,21 +61,23 @@ Widget _buildCover(BuildContext context) {
 }
 
 Widget _buildMoodAnimation(BuildContext context) {
-  return Container(
-    height: 150,
-    child: FlareActor(
-      'assets/animations/sunandstorm.flr',
-      fit: BoxFit.contain,
-      alignment: Alignment.bottomRight,
-      animation: Provider.of<HomeState>(context).getAnimationName(),
-      callback: (a) {
-        Provider.of<HomeState>(context).setAsAnimLoopStarted();
-      },
+  return SafeArea(
+    child: Container(
+      height: 200,
+      child: FlareActor(
+        'assets/animations/sunandstorm.flr',
+        fit: BoxFit.contain,
+        alignment: Alignment.bottomRight,
+        animation: Provider.of<HomeState>(context).getAnimationName(),
+        callback: (a) {
+          Provider.of<HomeState>(context).setAsAnimLoopStarted();
+        },
+      ),
     ),
   );
 }
 
-Widget showLastStorm(BuildContext context) {
+Widget _showLastStorm(BuildContext context) {
   HomeState _homeState = Provider.of<HomeState>(context);
 
   return StatusTile(
@@ -86,7 +87,7 @@ Widget showLastStorm(BuildContext context) {
   );
 }
 
-Widget showLastStormAndCaption(BuildContext context) {
+Widget _showLastStormAndCaption(BuildContext context) {
   HomeState _homeState = Provider.of<HomeState>(context);
   Widget _caption;
   if (_homeState.homeData.lastStorm.endDateDB == null) {
@@ -95,20 +96,25 @@ Widget showLastStormAndCaption(BuildContext context) {
     _caption = _stormCaption(Icons.event_available, "Completed", context);
   }
 
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      _caption,
-      showLastStorm(context),
-    ],
+  return SafeArea(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _caption,
+        _showLastStorm(context),
+      ],
+    ),
   );
 }
 
 Widget _stormCaption(IconData icon, String caption, BuildContext context) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.start,
     children: [
+      SizedBox(
+        width: 20,
+      ),
       Icon(
         icon,
         color: Colors.white,

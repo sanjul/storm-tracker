@@ -4,18 +4,19 @@ import 'package:flutter/widgets.dart';
 
 class CoverClipper extends CustomClipper<Path>{
   final double curveOffset;
+  final double heightOffset;
 
-  CoverClipper(this.curveOffset);
+  CoverClipper(this.heightOffset, this.curveOffset);
 
 
   @override
   getClip(Size size) {
 
-    double maxHeight = size.height - 5;
+    double maxHeight = size.height - heightOffset.abs();
 
     Path path = new Path();
-    path.lineTo(0.0, maxHeight - 5.0);
-    path.cubicTo(200, maxHeight - 100 + curveOffset, size.width-70, maxHeight + 10, size.width, maxHeight);
+    path.lineTo(0.0, maxHeight);
+    path.cubicTo(size.width/4, maxHeight + curveOffset, (size.width/4)*3, maxHeight - curveOffset, size.width, maxHeight);
     path.lineTo(size.width, 0.0);
     path.close();
     return path;

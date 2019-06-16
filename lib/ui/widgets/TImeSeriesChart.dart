@@ -34,7 +34,7 @@ class TimeSeriesChart extends StatelessWidget {
 
     if (_chartData.isEmpty) {
       return WelcomeNote(
-          "Not enough records available to show this chart. \nCome back here later!");
+          "Not enough records available to show this chart");
     }
 
     var _series = [

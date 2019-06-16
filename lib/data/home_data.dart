@@ -23,7 +23,7 @@ class HomeData {
   Storm get lastStorm => _lastStorm;
   bool get isEmpty => _stormsList.isEmpty;
   bool get isNotEmpty => !isEmpty;
-  bool get isStormInProgress => _lastStorm?.endDatetime == null;
+  bool get isStormInProgress => _lastStorm!= null && _lastStorm.endDatetime == null;
   bool get isNoStormInProgress => !isStormInProgress;
 
   int get avgSunnyDays => _avgSunnyDays;

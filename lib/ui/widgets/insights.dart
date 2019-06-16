@@ -3,27 +3,20 @@ import 'package:stormtr/data/home_data.dart';
 import 'package:stormtr/model/ChartState.dart';
 import 'package:stormtr/ui/widgets/TImeSeriesChart.dart';
 
-class Insights extends StatelessWidget {
+class Insights {
   final HomeData data;
 
   Insights({this.data});
 
-  @override
-  Widget build(BuildContext context) {
-    // if (_homeData.stats.isNotEmpty)
-
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: ListView(children: [
-        _buildHeader(context),
-        _buildPrediction(),
-
-        _buildChart(ChartType.SUNNY_DAYS),
-        _buildChart(ChartType.STORMY_DAYS),
-
-        _buildTable(context),
-      ]),
-    );
+  List<Widget> getWidgetList(BuildContext context) {
+    return [
+      SizedBox(height:20),
+      _buildHeader(context),
+      _buildPrediction(),
+      _buildChart(ChartType.SUNNY_DAYS),
+      _buildChart(ChartType.STORMY_DAYS),
+      _buildTable(context),
+    ];
   }
 
   Widget _buildPrediction() {

@@ -12,7 +12,7 @@ class TimelineState extends ChangeNotifier {
   List<Storm> get stormsList => _stormsList;
 
   TimelineState() {
-    _stormsData = new Injector().stormsData;
+    _stormsData = new  Injector().stormsData;
   }
 
   void loadStormsList() async {

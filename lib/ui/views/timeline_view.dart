@@ -4,6 +4,7 @@ import 'package:side_header_list_view/side_header_list_view.dart';
 
 import 'package:stormtr/data/storms_data.dart';
 import 'package:stormtr/model/TimelineState.dart';
+import 'package:stormtr/ui/widgets/WelcomeNote.dart';
 import 'package:stormtr/ui/widgets/storm_tile.dart';
 import 'package:stormtr/ui/widgets/year_header.dart';
 import 'package:stormtr/ui/views/storm_record_view.dart';
@@ -66,7 +67,7 @@ class TimelineViewState extends State<TimelineView>{
     }
 
     if (_timelineState.stormsList.isEmpty) {
-      return welcomeNote();
+      return WelcomeNote("Tap the + button to add a new record");
     }
 
     return Stack(
@@ -142,28 +143,4 @@ class TimelineViewState extends State<TimelineView>{
     setState(() {});
   }
 
-  Widget welcomeNote() {
-    return Center(
-      child: Material(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Icon(
-              Icons.filter_vintage,
-              color: Colors.purpleAccent,
-              size: 80.0,
-            ),
-            new Text("Welcome!", textScaleFactor: 2.5),
-            SizedBox(
-              height: 30.0,
-            ),
-            new Text(
-              "Tap the + button to add a new record",
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -11,25 +11,26 @@ class WelcomeNote extends StatelessWidget {
   }
 
  Widget welcomeNote() {
-    return Center(
-      child: Material(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Icon(
-              Icons.filter_vintage,
-              color: Colors.purpleAccent,
-              size: 80.0,
-            ),
-            new Text("Welcome!", textScaleFactor: 2.5),
-            SizedBox(
-              height: 30.0,
-            ),
-            new Text(
-              _instruction,
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ],
+    return SafeArea(
+          child: Center(
+        child: Material(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Icon(
+                Icons.filter_vintage,
+                color: Colors.purpleAccent,
+                size: 80.0,
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              new Text(
+                _instruction,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
         ),
       ),
     );
