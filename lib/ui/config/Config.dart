@@ -11,41 +11,36 @@ class Config {
   /// This defines app navigation.
   /// It Used in conjunction with AppNavigatorView
   static List<Navigatable> get navigatables => [
-        Navigatable(icon: Icons.home, title: "Home", tabs: [
-          Navigatable(
-            // title: "Home",
-            icon: Icons.home,
-            builder: () => HomeView.init(),
-          ),
-          Navigatable(
-            // title: "Time Line",
-            icon: Icons.view_list,
-            builder: () => TimelineView.init(),
-          )
-        ]),
+        Navigatable(
+          icon: Icons.home,
+          title: "Home",
+          builder: HomeView.init,
+        ),
+        Navigatable(
+          title: "Timeline",
+          icon: Icons.view_list,
+          builder: TimelineView.init,
+        ),
         Navigatable(
           icon: Icons.timeline,
           title: "Charts",
           tabs: [
             Navigatable(
-                icon: Icons.cloud,
-                title: "Stormy Days",
-                builder: () => StormyDaysChart()),
+              icon: Icons.cloud,
+              title: "Stormy Days",
+              builder: () => StormyDaysChart(),
+            ),
             Navigatable(
-                icon: Icons.wb_sunny,
-                title: "Sunny days",
-                builder: () => SunnyDaysChart()),
+              icon: Icons.wb_sunny,
+              title: "Sunny days",
+              builder: () => SunnyDaysChart(),
+            ),
           ],
         ),
         Navigatable(
           icon: Icons.ac_unit,
           title: "Data",
-          tabs: [
-            Navigatable(
-                icon: Icons.ac_unit,
-                title: "Generate Data",
-                builder: () => ManageGenDataView.init()),
-          ],
+          builder: ManageGenDataView.init,
         )
       ];
 }

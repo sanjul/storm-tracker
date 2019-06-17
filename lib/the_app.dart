@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stormtr/model/AppState.dart';
-import 'package:stormtr/ui/views/landing_view.dart';
+import 'package:stormtr/ui/navigation/app_landing_view.dart';
 
-class TheApp extends StatefulWidget {
-  @override
-  _TheAppState createState() => _TheAppState();
-}
+class TheApp extends StatelessWidget {
 
-class _TheAppState extends State<TheApp> {
+  static Future<Widget> init() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppState>.value(
+          notifier: AppState(prefs),
+        ),
+      ],
+      child: TheApp(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

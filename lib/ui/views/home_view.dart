@@ -42,6 +42,7 @@ class HomeView extends StatelessWidget {
       slivers: <Widget>[
         SliverAppBar(
           expandedHeight: 190,
+          backgroundColor: Theme.of(context).canvasColor,
           flexibleSpace: FlexibleSpaceBar(
             background: Stack(children: <Widget>[
               Cover(),

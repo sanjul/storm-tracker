@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stormtr/ui/navigation/app_main_view.dart';
 import 'package:stormtr/ui/widgets/logo.dart';
-import 'package:stormtr/ui/navigation/app_navigator_view.dart';
 import 'package:stormtr/util/AppUtil.dart';
 
 
@@ -33,7 +33,7 @@ class LandingViewState extends State<LandingView>
       if (status == AnimationStatus.completed) {
         appUtil.gotoPage(
           context,
-           AppNavigatorView(),
+          AppMainView()
         );
       }
     });

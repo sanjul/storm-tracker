@@ -5,7 +5,7 @@ import 'package:stormtr/model/HomeState.dart';
 enum RecContrlBtnType { StormStart, StormEnd }
 
 class RecordControllButton extends StatelessWidget {
-  RecContrlBtnType type;
+  final RecContrlBtnType type;
 
   RecordControllButton(this.type);
 

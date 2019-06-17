@@ -1,45 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:stormtr/ui/config/Config.dart';
+import 'package:provider/provider.dart';
+import 'package:stormtr/model/AppState.dart';
 
-import 'package:stormtr/ui/navigation/appdrawer_view.dart';
 import 'package:stormtr/ui/navigation/navigatable.dart';
 
-class AppNavigatorView extends StatefulWidget {
-  @override
-  AppNavigatorViewState createState() => AppNavigatorViewState();
-}
-
-class AppNavigatorViewState extends State<AppNavigatorView> {
-  List<Navigatable> _views;
-  Navigatable _currentView;
-
-  List<Navigatable> get views => _views;
-  Navigatable get currentView => this._currentView;
-
-  @override
-  void initState() {
-    /* List of views that can be loaded in home view */
-    _views = Config.navigatables;
-
-    /* Set Home view as the default view */
-    _currentView = _views[0];
-
-    super.initState();
-  }
-
+class AppFrontNavView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
+    Navigatable _currentView = appState.currentView;
     Widget content = Scaffold(
-      appBar: new AppBar(
-        
-        title: Text(_currentView != null ? _currentView.title : null),
-      ),
-      body: _buildBody(),
+      body: _buildBody(context),
       bottomNavigationBar: Container(
-        child: _buildTabs(),
+        child: _buildTabs(context),
         // color: Theme.of(context).accentColor,
       ),
-      drawer: AppDrawer(this),
+      // drawer: AppDrawer(),
     );
 
     if (_currentView.builder == null &&
@@ -49,18 +25,18 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
         length: _currentView.tabs.length,
         child: content,
       );
+    } else if (_currentView.builder != null &&
+        (_currentView.tabs == null || _currentView.tabs.isEmpty)) {
+      return _currentView.builder();
     }
 
     return content;
   }
 
-  void navigateTo(Navigatable view) {
-    setState(() {
-      _currentView = view;
-    });
-  }
+  Widget _buildBody(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
+    Navigatable _currentView = appState.currentView;
 
-  Widget _buildBody() {
     if (_currentView.builder != null) {
       return _currentView.builder();
     } else if (_currentView.tabs != null && _currentView.tabs.isNotEmpty) {
@@ -76,7 +52,10 @@ class AppNavigatorViewState extends State<AppNavigatorView> {
     }
   }
 
-  Widget _buildTabs() {
+  Widget _buildTabs(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
+    Navigatable _currentView = appState.currentView;
+
     if (_currentView.tabs != null && _currentView.builder == null) {
       List<Tab> _tabs = new List<Tab>();
       _currentView.tabs.forEach((nav) {

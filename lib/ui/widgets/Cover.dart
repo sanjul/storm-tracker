@@ -3,7 +3,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stormtr/model/HomeState.dart';
-import 'package:stormtr/ui/widgets/CoverClipper.dart';
 import 'package:stormtr/ui/widgets/status_tile.dart';
 
 const String ASSET_SUNNY_DAY_IMAGE = 'assets/graphics/cover_lights.jpeg';

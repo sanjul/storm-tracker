@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:stormtr/dependency_injection.dart';
-import 'package:stormtr/model/AppState.dart';
 import 'package:stormtr/the_app.dart';
 
 Future main() async {
@@ -13,12 +9,8 @@ Future main() async {
     primaryDataSource: DataSource.SQLLITE,
   );
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  
+  Widget app = await TheApp.init();
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<AppState>.value(notifier: AppState(prefs),),
-    ],
-    child: TheApp(),
-  ));
+  runApp(app);
 }
