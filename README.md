@@ -2,6 +2,7 @@
 [![Codemagic build status](https://api.codemagic.io/apps/5ce82b289b46f50010d713f4/5ce82b289b46f50010d713f3/status_badge.svg)](https://codemagic.io/apps/5ce82b289b46f50010d713f4/5ce82b289b46f50010d713f3/latest_build)
 
 An experimental flutter project for tracking 'personal storms'!
+
 This app can probably be used as a basic cycle tracker.
 
 ## Screens
