@@ -17,16 +17,14 @@ This app can probably be used as a basic cycle tracker.
       <td style="text-align: center">
         <img src="https://i.imgflip.com/34co60.gif" width="200" title="A storm in progress"/>
       </td>
-    </tr>
-    <tr>
       <td style="text-align: center">
         <img src="https://i.imgflip.com/34codq.gif" width="200" title="Marking end of a storm in progress"/>
       </td>
+    </tr>
+    <tr>
       <td style="text-align: center">
         <img src="https://i.imgflip.com/34coil.gif" width="200" title="Opening timeline view from backdrop menu"/>
       </td>
-    </tr>
-    <tr>
       <td style="text-align: center">
         <img src="https://i.imgflip.com/34cop8.gif" width="200" title="flipping dark mode off"/>
       </td>
