@@ -5,7 +5,7 @@
 
 An experimental flutter app for tracking 'personal storms'!
 
-This could probably function as a basic cycle tracker.
+This could potentially function as a basic cycle tracker.
 
 ## Screens
 <div style="text-align: center">
